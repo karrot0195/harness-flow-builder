@@ -8,7 +8,7 @@ RECEIVED_AT: <DATE>
 PROFILE: ./wiki/.harness/project_profile.md
 ARCHITECTURE: ./wiki/architecture.md
 
-COMMON_SKILLS_DIR: <path to harness base skills, e.g. ../../harness-flow-builder/skills>
+COMMON_SKILLS_DIR: ./skills
 TARGET_SKILLS_DIR: ./wiki/.harness/skills
 
 ## Optional overrides (leave blank to use profile values)
