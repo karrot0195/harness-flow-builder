@@ -11,36 +11,36 @@ TOKENS: PROJECT_NAME, DOCS_ROOT, SRC_ROOT
 
 # sdlc-ingest-project
 
-> This is a COMMON base skill. It contains {{TOKENS}} placeholders and must
-> not be executed as-is. Run `sdlc-customize-skills` first - it renders
-> project-specific copies into ./wiki/.harness/skills/. Use those.
+> COMMON base skill. Contains {{TOKENS}}. Run `sdlc-customize-skills` first.
 
 ## Purpose
-Decompose a project (existing repo or new idea) into a canonical project doc
-plus one feature doc per capability. Entry point of the flow; its output feeds
-arch-define.
+Decompose a project (existing repo or new idea) into a project doc plus one
+feature doc per capability. Entry point of the flow; feeds arch-define.
+
+## Pre-step verify
+ - TYPE=brownfields -> PROJECT_PATH exists and is readable.
+ - TYPE=new         -> PROJECT_DESCRIPTION non-empty.
+ - {{DOCS_ROOT}} creatable (run ./setup.sh if missing).
 
 ## Input
-Fill `templates/input/ingest_project_input.md` (project-customized copy lives in
-./wiki/.harness/ after customization) and pass it to this skill.
+templates/input/ingest_project_input.md
 
 ## Output
 project.md + feature.md (one per feature)
 
 ## Instructions
-1. Read the input template. If TYPE=brownfields, scan PROJECT_PATH (file tree,
-   README, manifests, entry points). If TYPE=new, use PROJECT_DESCRIPTION.
-2. Name the project ({{PROJECT_NAME}}), write a one-paragraph description.
-3. List every distinct feature/capability: one per user-visible capability or
-   major module boundary.
+1. brownfields -> scan tree/README/manifests/entry points. new -> use text.
+2. Name the project ({{PROJECT_NAME}}); write a one-paragraph description.
+3. List every distinct feature/capability.
 4. Fill templates/output/feature.md per feature ->
    {{DOCS_ROOT}}/features/feature_<snake_case_name>.md.
-5. Fill templates/output/project.md -> {{DOCS_ROOT}}/project.md listing all
-   feature paths.
+5. Fill templates/output/project.md -> {{DOCS_ROOT}}/project.md.
 6. Set VERTIFY: DRAFT on all new files.
 7. Update .harness/current.md: PHASE=ingest-project, STATUS=DONE.
 
+## Next Step
+ - GATE: sdlc-arch-define (required).
+
 ## Done when
- - {{DOCS_ROOT}}/project.md exists and lists every feature path on disk.
+ - {{DOCS_ROOT}}/project.md lists every feature path on disk.
  - Every feature doc matches the template.
- - .harness/current.md points to the produced artifacts.

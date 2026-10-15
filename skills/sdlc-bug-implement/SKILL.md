@@ -11,31 +11,32 @@ TOKENS: DOCS_ROOT, SRC_ROOT, LINT_CMD, CONVENTIONS
 
 # sdlc-bug-implement
 
-> This is a COMMON base skill. It contains {{TOKENS}} placeholders and must
-> not be executed as-is. Run `sdlc-customize-skills` first - it renders
-> project-specific copies into ./wiki/.harness/skills/. Use those.
+> COMMON base skill. Contains {{TOKENS}}. Run `sdlc-customize-skills` first.
 
 ## Purpose
-Create the canonical bug artifact so planning treats bugs and tasks
-identically downstream. (Use the PROJECT copy of this skill.)
+Create the canonical bug artifact so planning treats bugs and tasks identically.
+
+## Pre-step verify
+ - sdlc-verify passed.
+ - SUMMARY + REPRO_STEPS + EXPECTED/ACTUAL present.
 
 ## Input
-Fill `templates/input/bug_implement_input.md` (project-customized copy lives in
-./wiki/.harness/ after customization) and pass it to this skill.
+templates/input/bug_implement_input.md
 
 ## Output
 bug.md -> {{DOCS_ROOT}}/bugs/bug_<name>.md
 
 ## Instructions
-1. Read SUMMARY, REPRO_STEPS, EXPECTED/ACTUAL, ENVIRONMENT, SEVERITY.
-2. Try to reproduce by running the app per {{RUN_CMD}} (or reading the
-   affected {{SRC_ROOT}} path) before writing hypotheses.
+1. Read SUMMARY/REPRO/EXPECTED/ACTUAL/ENV/SEVERITY.
+2. Try to reproduce ({{RUN_CMD}} or read affected {{SRC_ROOT}}).
 3. Fill templates/output/bug.md -> {{DOCS_ROOT}}/bugs/bug_<snake_case_name>.md
-   with >=1 verifiable root-cause hypothesis (code refs where possible).
-4. Name the file per {{CONVENTIONS}}.
-5. CRITICAL severity -> flag in .harness/current.md Notes.
+   with >=1 verifiable hypothesis grounded in {{SRC_ROOT}}.
+4. Follow {{CONVENTIONS}}.
+5. CRITICAL -> flag in .harness/current.md Notes.
 6. Update .harness/current.md: PHASE=bug-implement, STATUS=DONE.
 
+## Next Step
+ - GATE: sdlc-plan-task (required).
+
 ## Done when
- - Bug file exists with complete repro and >=1 hypothesis grounded in {{SRC_ROOT}}.
- - Severity recorded; CRITICAL bugs flagged in current.md.
+ - Bug file has complete repro + >=1 grounded hypothesis; severity recorded.

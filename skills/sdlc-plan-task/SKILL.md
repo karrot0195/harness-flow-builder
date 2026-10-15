@@ -11,33 +11,35 @@ TOKENS: MODULES, SRC_ROOT, TEST_ROOT, TEST_CMD, CONVENTIONS
 
 # sdlc-plan-task
 
-> This is a COMMON base skill. It contains {{TOKENS}} placeholders and must
-> not be executed as-is. Run `sdlc-customize-skills` first - it renders
-> project-specific copies into ./wiki/.harness/skills/. Use those.
+> COMMON base skill. Contains {{TOKENS}}. Run `sdlc-customize-skills` first.
 
 ## Purpose
-Translate a task/bug into ordered, verifiable implementation steps that
-sdlc-implement can execute without further questions. (Use the PROJECT copy.)
+Translate a task/bug into ordered, verifiable steps sdlc-implement can execute
+without further questions.
+
+## Pre-step verify
+ - WORK_ITEM exists with acceptance criteria.
+ - ARCHITECTURE + project_profile.md exist and are STABLE.
 
 ## Input
-Fill `templates/input/plan_task_input.md` (project-customized copy lives in
-./wiki/.harness/ after customization) and pass it to this skill.
+templates/input/plan_task_input.md
 
 ## Output
 plan.md -> {{DOCS_ROOT}}/plans/plan_<name>.md
 
 ## Instructions
-1. Read WORK_ITEM (task_*.md or bug_*.md) + ARCHITECTURE + project_profile.md.
+1. Read WORK_ITEM + ARCHITECTURE + project_profile.md.
 2. Fill templates/output/plan.md:
-   - Steps ordered by dependency; each step names concrete files under
-     {{SRC_ROOT}} to touch and how to verify ({{TEST_CMD}} subtest, or an
-     observable check).
-   - Test Strategy proves every acceptance criterion; name the {{TEST_ROOT}}
-     files to add/update.
+   - Steps ordered by dependency; each names files under {{SRC_ROOT}} to touch
+     and a verify command ({{TEST_CMD}} subtest or observable check).
+   - Test Strategy proves every acceptance criterion; names {{TEST_ROOT}} files.
    - Risks with mitigations.
 3. Keep steps small enough to review independently.
 4. Update .harness/current.md: PHASE=plan-task, STATUS=DONE.
 
+## Next Step
+ - GATE: sdlc-implement (required).
+
 ## Done when
- - Plan exists; every acceptance criterion maps to a step + a test line.
- - Every step has touch + verify; verify uses project commands from the profile.
+ - Every acceptance criterion maps to a step + a test line.
+ - Every step has touch + verify using project commands.

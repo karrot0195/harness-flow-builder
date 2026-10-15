@@ -11,17 +11,17 @@ TOKENS: LINT_CMD, TEST_CMD, DOCS_ROOT
 
 # sdlc-review
 
-> This is a COMMON base skill. It contains {{TOKENS}} placeholders and must
-> not be executed as-is. Run `sdlc-customize-skills` first - it renders
-> project-specific copies into ./wiki/.harness/skills/. Use those.
+> COMMON base skill. Contains {{TOKENS}}. Run `sdlc-customize-skills` first.
 
 ## Purpose
 Optional phase. Final quality gate before work counts as done.
-(Use the PROJECT copy.)
+
+## Pre-step verify
+ - PLAN + IMPLEMENTATION exist. TEST_REPORT exists or SKIP reason recorded.
+ - DIFF range resolvable (git).
 
 ## Input
-Fill `templates/input/review_input.md` (project-customized copy lives in
-./wiki/.harness/ after customization) and pass it to this skill.
+templates/input/review_input.md
 
 ## Output
 review.md -> {{DOCS_ROOT}}/reports/review_<name>.md
@@ -35,6 +35,9 @@ review.md -> {{DOCS_ROOT}}/reports/review_<name>.md
    concrete checklist that loops back to sdlc-implement.
 5. Update .harness/current.md: PHASE=review, STATUS=DONE.
 
+## Next Step
+ - APPROVED -> phase complete; next work item starts at task/bug-implement.
+ - CHANGES_REQUESTED -> back to sdlc-implement (GATE loop).
+
 ## Done when
- - Review report exists with explicit APPROVED or CHANGES_REQUESTED verdict.
- - CHANGES_REQUESTED names concrete required changes looping to sdlc-implement.
+ - Review report exists with explicit APPROVED or CHANGES_REQUESTED.

@@ -20,7 +20,7 @@ SEVERITY: <LOW|MEDIUM|HIGH|CRITICAL>
  - actual:   <...>
 
 ## Root Cause Hypotheses
- - <hypothesis> - <how to verify, e.g. reproduce then trace with {{LINT_CMD}}-clean code>
+ - <hypothesis> - <how to verify>
 
 ## Environment
  <os/runtime/versions>

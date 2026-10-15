@@ -13,7 +13,7 @@ ESTIMATED_STEPS: <N>
 ---
 
 ## Context
- <summary of work item + architecture constraints that matter>
+ <summary of work item + architecture constraints>
 
 ## Steps
  - [ ] S1: <action> -> touch: <files> -> verify: <how>
