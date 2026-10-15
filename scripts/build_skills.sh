@@ -693,43 +693,94 @@ mkdir -p "$SKILL_DIR/doc-generator"
 cat > $SKILL_DIR/doc-generator/SKILL.md << 'EOF'
 ---
 name: doc-generator
-description: Scans the current project and generates structured documentation — README.md plus docs/FLOW.md and supporting docs/* files. Use when the user asks to "document this project", "generate docs", "create a README", or invokes /doc-generator.
-version: 1.0.0
+description: Generate or update project documentation (such as README.md, FLOW.md, or provider specs) based on the repository tree, codebase features, tech stack, and workflows. Use when the user asks to create, update, or maintain documentation files.
 ---
 
-# Doc Generator
+# Documentation Generator Skill
 
-You are a technical documentation generator. Your job is to **scan the project**, **understand it**, then **write accurate, non-hallucinated docs** into the repo.
+A skill for generating, updating, and structuring project documentation files like `README.md`, `FLOW.md`, or architecture specifications.
 
-## Trigger phrases
-- "generate docs for this project"
-- "create a README"
-- "document this codebase"
-- "/doc-generator"
-- "write docs/FLOW.md"
+## When to Use
+Use this skill when the user asks to create or update project documentation, workflow files, structure docs, or markdown guides based on the active codebase layout and design.
 
-## Hard rules
-1. **Never invent facts.** If you can't verify a tech, dependency, or flow from the repo, omit it or mark it `<!-- TODO: verify -->`.
-2. **Cite sources.** After every claim, you may add a short source hint in your scratchpad (file:line). Do not include sources in the final docs unless useful.
-3. **Idempotent.** If a target file already exists, preserve user-written sections and only fill/extend. Ask before overwriting non-empty files.
-4. **No secrets.** Never copy `.env`, keys, tokens, or credentials into docs.
-5. **Respect `.gitignore`.** Skip ignored paths (node_modules, dist, build, .venv, target, vendor).
+## Workflow
 
----
+1. **Analyze Workspace & Scope**: Review the repository tree, source files, directory layout (e.g., `docs/`, `internal/`, `bin/`), and build configurations (`makefile`).
+2. **Determine Target Document**: Identify whether you are updating `README.md`, creating a flow document (`docs/FLOW.md`), or documenting a provider spec.
+3. **Synthesize Content**:
+   - Ensure accurate stack details and setup/build steps (`make build`, `./bin/...`).
+   - Match exact directory trees and schema references.
+4. **Write/Update Markdown**: Generate clear, scannable markdown files using proper headings, code blocks, and lists.
+   - Auto-load images from `./assets` (e.g., `<img src="./assets/linux.png" />` as in README.md).
 
-## Phase 1 — Scan
+## Current Project Analysis
 
-Run these in order. Use the tools available (bash, glob, grep, read).
+This skill is designed for the `go-utils` project. Here's what I've discovered:
 
-### 1.1 Project skeleton
+### Project Structure
+- **Root**: `/home/kai/Workspaces/go-utils`
+- **Module**: `go-utils` (Go 1.26.9)
+- **Build System**: Makefile with `build` and `clean` targets
+- **Main Binary**: `cmd/openroute/main.go` - CLI tool for fetching OpenRouter model data
+
+### Key Packages
+- `packages/openroute/` - Core package for interacting with OpenRouter API
+  - `client.go` - HTTP client for fetching model data with caching
+  - `model.go` - Data structures for OpenRouter model responses
+  - `printer.go` - Tabular output formatting
+- `packages/envs/` - Environment configuration (empty)
+- `packages/log/` - Logging utilities (empty)
+- `packages/vultr/` - Vultr API integration (empty)
+
+### Build Instructions
 ```bash
-ls -la
-find . -maxdepth 3 -type f \
-  -not -path '*/node_modules/*' \
-  -not -path '*/.git/*' \
-  -not -path '*/dist/*' \
-  -not -path '*/build/*' \
-  -not -path '*/.venv/*' \
-  -not -path '*/target/*' \
-  | sort | head -300
+make build
+./bin/openroute --type free
+```
+
+### Documentation Targets
+This skill can generate:
+- `README.md` - Project overview and setup instructions
+- `docs/FLOW.md` - Workflow documentation
+- Provider specifications for each package
+
+### Assets
+- `./assets/cmd_openroute.png` - Binary diagram image
+
+### Dependencies
+- Go 1.26.9+
+- Standard library only (no external dependencies)
+- Uses `net/http`, `encoding/json`, and standard Go tooling
+
+### Features
+- Model fetching from OpenRouter API with intelligent caching
+- Free vs. all model filtering
+- Tabular output with benchmarks (coding index, intelligence index)
+- Price formatting (scaled to per-million tokens)
+- Sorting by combined benchmark scores
+
+## Usage Examples
+
+### Fetch Free Models
+```bash
+./bin/openroute --type free
+```
+
+### Fetch All Models
+```bash
+./bin/openroute --type all
+```
+
+### Clean Build
+```bash
+make clean
+```
+
+## Next Steps
+When generating documentation, this skill will:
+1. Verify build instructions work
+2. Document package interfaces and dependencies
+3. Include code examples and usage patterns
+4. Reference supporting assets where appropriate
+5. Maintain consistency with existing documentation style
 EOF
