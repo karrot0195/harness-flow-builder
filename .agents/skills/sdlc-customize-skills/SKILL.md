@@ -5,7 +5,7 @@ scope: common
 flow: harness-flow
 gate: GATE
 input_template: templates/input/customize_skills_input.md
-output_template: ./wiki/.harness/skills/sdlc-*/SKILL.md (rendered copies)
+output_template: {{DOCS_ROOT}}/.harness/skills/sdlc-*/SKILL.md (rendered copies)
 tokens: all tokens in project_profile.md
 ---
 
@@ -26,7 +26,7 @@ with the matching value from project_profile.md.
 templates/input/customize_skills_input.md
 
 ## Output
-./wiki/.harness/skills/sdlc-*/SKILL.md (rendered)
+{{DOCS_ROOT}}/.harness/skills/sdlc-*/SKILL.md (rendered)
 
 ## Instructions
 1. Read PROFILE + ARCHITECTURE.
@@ -36,7 +36,7 @@ templates/input/customize_skills_input.md
    c. Replace base warning with rendered-by notice + DATE.
    d. Write to TARGET_SKILLS_DIR/<name>/SKILL.md.
 3. Fail if any {{TOKEN}} remains.
-4. Update .harness/current.md: PHASE=customize-skills, STATUS=DONE,
+4. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=customize-skills, STATUS=DONE,
    TARGET_SKILLS_DIR recorded.
 
 ## Next Step

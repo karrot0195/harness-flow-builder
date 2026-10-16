@@ -6,6 +6,7 @@ UPDATED_AT: <DATE>
 
 # Flow
 
+{{WORKSPACE_GATE}}
 ingest-project: GATE
   -> arch-define: GATE
     -> customize-skills: GATE
@@ -28,5 +29,10 @@ synch-sdlc-skills: OPTIONAL (on harness update)
 
 # Two tiers of skills
  1. COMMON  -> skills/sdlc-*/SKILL.md (contain {{TOKENS}})
- 2. PROJECT -> ./wiki/.harness/skills/sdlc-*/SKILL.md (rendered)
+ 2. PROJECT -> {{DOCS_ROOT}}/.harness/skills/sdlc-*/SKILL.md (rendered)
  From customize-skills onward ALWAYS use PROJECT skills.
+
+# Multi-project note
+ - Single-project: {{PROJECT_ID}}=default, {{DOCS_ROOT}}=wiki
+ - Multi-project:  set harness.conf before --install; each project gets its
+   own PROJECT_ID, DOCS_ROOT, and .harness/projects/<ID>/current.md

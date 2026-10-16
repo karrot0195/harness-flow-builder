@@ -28,5 +28,5 @@ COMMON_SKILLS_DIR: .agents/skills
 # Always protected (informational; enforced)
 PROTECTED:
  - .harness/current.md
- - .harness/project_profile.md
+ - {{DOCS_ROOT}}/.harness/project_profile.md
  - wiki/**

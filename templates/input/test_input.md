@@ -5,7 +5,7 @@ RECEIVED_AT: <DATE>
 
 # Test Input
 
-IMPLEMENTATION: ./wiki/reports/implementation_<NAME>.md
+IMPLEMENTATION: {{DOCS_ROOT}}/reports/implementation_<NAME>.md
 
 AFFECTED_PATHS:
  - <file/dir touched by the implementation>

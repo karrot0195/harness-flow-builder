@@ -7,7 +7,7 @@ UPDATED_AT: <DATE>
 ---
 VERTIFY: <DRAFT|STABLE>
 
-PLAN: ./wiki/plans/plan_<NAME>.md
+PLAN: {{DOCS_ROOT}}/plans/plan_<NAME>.md
 VERDICT: <APPROVED|CHANGES_REQUESTED>
 
 ---

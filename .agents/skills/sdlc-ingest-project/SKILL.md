@@ -6,7 +6,7 @@ flow: harness-flow
 gate: GATE
 input_template: templates/input/ingest_project_input.md
 output_template: templates/output/project.md + feature.md (one per feature)
-tokens: PROJECT_NAME, DOCS_ROOT, SRC_ROOT
+tokens: PROJECT_NAME, PROJECT_ID, PROJECT_PATH, DOCS_ROOT, SRC_ROOT
 ---
 
 # sdlc-ingest-project
@@ -36,7 +36,9 @@ project.md + feature.md (one per feature)
    {{DOCS_ROOT}}/features/feature_<snake_case_name>.md.
 5. Fill templates/output/project.md -> {{DOCS_ROOT}}/project.md.
 6. Set VERTIFY: DRAFT on all new files.
-7. Update .harness/current.md: PHASE=ingest-project, STATUS=DONE.
+7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=ingest-project, STATUS=DONE.
+   (Also mirror the phase into .harness/projects/{{PROJECT_ID}}/current.md if
+   the target is multi-project.)
 
 ## Next Step
  - GATE: sdlc-arch-define (required).

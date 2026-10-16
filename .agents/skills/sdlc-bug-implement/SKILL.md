@@ -32,8 +32,8 @@ bug.md -> {{DOCS_ROOT}}/bugs/bug_<name>.md
 3. Fill templates/output/bug.md -> {{DOCS_ROOT}}/bugs/bug_<snake_case_name>.md
    with >=1 verifiable hypothesis grounded in {{SRC_ROOT}}.
 4. Follow {{CONVENTIONS}}.
-5. CRITICAL -> flag in .harness/current.md Notes.
-6. Update .harness/current.md: PHASE=bug-implement, STATUS=DONE.
+5. CRITICAL -> flag in {{DOCS_ROOT}}/.harness/current.md Notes.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=bug-implement, STATUS=DONE.
 
 ## Next Step
  - GATE: sdlc-plan-task (required).

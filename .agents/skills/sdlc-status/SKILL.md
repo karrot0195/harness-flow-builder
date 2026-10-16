@@ -6,7 +6,7 @@ flow: harness-flow
 gate: OPTIONAL
 input_template: templates/input/status_input.md
 output_template: templates/output/status_report.md -> {{DOCS_ROOT}}/reports/status_<name>.md
-tokens: DOCS_ROOT
+tokens: DOCS_ROOT, PROJECT_ID
 ---
 
 # sdlc-status
@@ -30,6 +30,7 @@ status_report.md -> {{DOCS_ROOT}}/reports/status_<name>.md
 
 ## Instructions
 1. Read .harness/current.md (phase, status, active item, notes).
+   If .harness/projects/{{PROJECT_ID}}/current.md exists, prefer it.
 2. Scan {{DOCS_ROOT}}: project.md, architecture.md, features/, tasks/, bugs/,
    plans/, reports/, .harness/.
 3. Read frontmatter per artifact: NAME, VERTIFY, STATUS/RESULT, dates.

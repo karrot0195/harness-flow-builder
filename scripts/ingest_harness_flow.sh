@@ -18,11 +18,11 @@ esac
 
 SKILLS_DIR=".agents/skills"
 
-# Items the harness ships; diffed per top-level entry.
 MANIFEST=(
   "scripts/"
   "skills/"
   "templates/"
+  ".agents/skills/"
   ".harness/flow.md"
 )
 
@@ -51,7 +51,6 @@ if [ "$MODE" = "detect" ]; then
         echo "  DIFFERS   $item"
       fi
     done
-    # report target's rendered skills dir
     if [ -d "$TARGET/$SKILLS_DIR" ]; then
       echo "  SKILLS_DIR present: $TARGET/$SKILLS_DIR"
     else
@@ -91,8 +90,8 @@ if [ "$MODE" = "plan" ]; then
     echo
     echo "## Always protected"
     echo "- \`.harness/current.md\`"
-    echo "- \`.harness/project_profile.md\`"
-    echo "- \`wiki/**\`"
+    echo "- \`.harness/projects/*/current.md\`"
+    echo "- \`*/wiki/**\`"
     echo
     echo "## Confirm"
     echo "Write \`.harness/ingest-harness-flow.confirm\`, one line per item:"
@@ -108,7 +107,6 @@ fi
 
 # ---------------- apply ----------------
 if [ "$MODE" = "apply" ]; then
-  # new project: straight to install.sh
   if [ "$has_harness" -eq 0 ]; then
     bash "$SCRIPT_DIR/install.sh" "$TARGET"
     exit 0
@@ -136,7 +134,7 @@ if [ "$MODE" = "apply" ]; then
     esac
   done < "$CONFIRM"
 
-  # Ensure skills land in the canonical consumer location for this target.
+  # Sync base skills to consumer location (multi-project aware).
   if [ -d "$TARGET/skills" ]; then
     mkdir -p "$TARGET/$SKILLS_DIR"
     cp -R "$TARGET/skills/." "$TARGET/$SKILLS_DIR/"

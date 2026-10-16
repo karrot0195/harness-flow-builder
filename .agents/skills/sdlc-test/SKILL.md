@@ -36,7 +36,7 @@ test_report.md -> {{DOCS_ROOT}}/reports/test_<name>.md
    {{DOCS_ROOT}}/reports/test_<name>.md.
 5. On FAIL: list failing cases + snippets; loop back to sdlc-implement unless
    failures are pre-existing (then note and continue).
-6. Update .harness/current.md: PHASE=test, STATUS=<DONE|SKIPPED + reason>.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=test, STATUS=<DONE|SKIPPED + reason>.
 
 ## Next Step
  - OPTIONAL: sdlc-review (or auto-approve with logged reason).

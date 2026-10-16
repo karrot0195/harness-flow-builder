@@ -15,7 +15,7 @@ flow: harness-flow
 gate: GATE
 input_template: templates/input/ingest_project_input.md
 output_template: templates/output/project.md + feature.md (one per feature)
-tokens: PROJECT_NAME, DOCS_ROOT, SRC_ROOT
+tokens: PROJECT_NAME, PROJECT_ID, PROJECT_PATH, DOCS_ROOT, SRC_ROOT
 ---
 
 # sdlc-ingest-project
@@ -45,7 +45,9 @@ project.md + feature.md (one per feature)
    {{DOCS_ROOT}}/features/feature_<snake_case_name>.md.
 5. Fill templates/output/project.md -> {{DOCS_ROOT}}/project.md.
 6. Set VERTIFY: DRAFT on all new files.
-7. Update .harness/current.md: PHASE=ingest-project, STATUS=DONE.
+7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=ingest-project, STATUS=DONE.
+   (Also mirror the phase into .harness/projects/{{PROJECT_ID}}/current.md if
+   the target is multi-project.)
 
 ## Next Step
  - GATE: sdlc-arch-define (required).
@@ -64,7 +66,7 @@ flow: harness-flow
 gate: GATE
 input_template: templates/input/arch_define_input.md
 output_template: templates/output/architecture.md + project_profile.md
-tokens: PROJECT_NAME, LANGUAGE, RUNTIME, FRAMEWORK, STORAGE, PACKAGE_MANAGER, SRC_ROOT, TEST_ROOT, DOCS_ROOT
+tokens: PROJECT_NAME, PROJECT_ID, PROJECT_PATH, LANGUAGE, RUNTIME, FRAMEWORK, STORAGE, PACKAGE_MANAGER, SRC_ROOT, TEST_ROOT, DOCS_ROOT
 ---
 
 # sdlc-arch-define
@@ -91,9 +93,11 @@ architecture.md + project_profile.md
    Key Decisions, Open Questions).
 3. Fill templates/output/project_profile.md ->
    {{DOCS_ROOT}}/.harness/project_profile.md. Commands must be exact.
+   Include PROJECT_ID={{PROJECT_ID}}, PROJECT_PATH={{PROJECT_PATH}},
+   WIKI_ROOT={{DOCS_ROOT}}.
 4. Resolve or escalate every Open Question.
 5. Flip project.md + feature docs to VERTIFY: STABLE.
-6. Update .harness/current.md: PHASE=arch-define, STATUS=DONE.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=arch-define, STATUS=DONE.
 
 ## Next Step
  - GATE: sdlc-customize-skills (required), then sdlc-verify.
@@ -112,7 +116,7 @@ scope: common
 flow: harness-flow
 gate: GATE
 input_template: templates/input/customize_skills_input.md
-output_template: ./wiki/.harness/skills/sdlc-*/SKILL.md (rendered copies)
+output_template: {{DOCS_ROOT}}/.harness/skills/sdlc-*/SKILL.md (rendered copies)
 tokens: all tokens in project_profile.md
 ---
 
@@ -133,7 +137,7 @@ with the matching value from project_profile.md.
 templates/input/customize_skills_input.md
 
 ## Output
-./wiki/.harness/skills/sdlc-*/SKILL.md (rendered)
+{{DOCS_ROOT}}/.harness/skills/sdlc-*/SKILL.md (rendered)
 
 ## Instructions
 1. Read PROFILE + ARCHITECTURE.
@@ -143,7 +147,7 @@ templates/input/customize_skills_input.md
    c. Replace base warning with rendered-by notice + DATE.
    d. Write to TARGET_SKILLS_DIR/<name>/SKILL.md.
 3. Fail if any {{TOKEN}} remains.
-4. Update .harness/current.md: PHASE=customize-skills, STATUS=DONE,
+4. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=customize-skills, STATUS=DONE,
    TARGET_SKILLS_DIR recorded.
 
 ## Next Step
@@ -191,7 +195,7 @@ task.md -> {{DOCS_ROOT}}/tasks/task_<name>.md
    {{DOCS_ROOT}}/tasks/task_<snake_case_name>.md.
 4. Out of Scope is mandatory.
 5. Name the file per {{CONVENTIONS}}.
-6. Update .harness/current.md: PHASE=task-implement, STATUS=DONE.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=task-implement, STATUS=DONE.
 
 ## Next Step
  - GATE: sdlc-plan-task (required).
@@ -236,8 +240,8 @@ bug.md -> {{DOCS_ROOT}}/bugs/bug_<name>.md
 3. Fill templates/output/bug.md -> {{DOCS_ROOT}}/bugs/bug_<snake_case_name>.md
    with >=1 verifiable hypothesis grounded in {{SRC_ROOT}}.
 4. Follow {{CONVENTIONS}}.
-5. CRITICAL -> flag in .harness/current.md Notes.
-6. Update .harness/current.md: PHASE=bug-implement, STATUS=DONE.
+5. CRITICAL -> flag in {{DOCS_ROOT}}/.harness/current.md Notes.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=bug-implement, STATUS=DONE.
 
 ## Next Step
  - GATE: sdlc-plan-task (required).
@@ -284,7 +288,7 @@ plan.md -> {{DOCS_ROOT}}/plans/plan_<name>.md
    - Test Strategy proves every acceptance criterion; names {{TEST_ROOT}} files.
    - Risks with mitigations.
 3. Keep steps small enough to review independently.
-4. Update .harness/current.md: PHASE=plan-task, STATUS=DONE.
+4. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=plan-task, STATUS=DONE.
 
 ## Next Step
  - GATE: sdlc-implement (required).
@@ -333,7 +337,7 @@ implementation.md -> {{DOCS_ROOT}}/reports/implementation_<name>.md (+ code)
    Known Issues, How to Verify).
 6. Follow {{CONVENTIONS}}.
 7. Never touch files outside the plan's scope.
-8. Update .harness/current.md: PHASE=implement, STATUS=<DONE|BLOCKED>.
+8. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=implement, STATUS=<DONE|BLOCKED>.
 
 ## Next Step
  - OPTIONAL: sdlc-test (recommended for behavior change).
@@ -383,7 +387,7 @@ test_report.md -> {{DOCS_ROOT}}/reports/test_<name>.md
    {{DOCS_ROOT}}/reports/test_<name>.md.
 5. On FAIL: list failing cases + snippets; loop back to sdlc-implement unless
    failures are pre-existing (then note and continue).
-6. Update .harness/current.md: PHASE=test, STATUS=<DONE|SKIPPED + reason>.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=test, STATUS=<DONE|SKIPPED + reason>.
 
 ## Next Step
  - OPTIONAL: sdlc-review (or auto-approve with logged reason).
@@ -429,7 +433,7 @@ review.md -> {{DOCS_ROOT}}/reports/review_<name>.md
 3. Fill templates/output/review.md with findings tagged [BLOCKER] / [NIT].
 4. VERDICT=APPROVED only with zero blockers; CHANGES_REQUESTED lists a
    concrete checklist that loops back to sdlc-implement.
-5. Update .harness/current.md: PHASE=review, STATUS=DONE.
+5. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=review, STATUS=DONE.
 
 ## Next Step
  - APPROVED -> phase complete; next work item starts at task/bug-implement.
@@ -448,7 +452,7 @@ flow: harness-flow
 gate: OPTIONAL
 input_template: templates/input/status_input.md
 output_template: templates/output/status_report.md -> {{DOCS_ROOT}}/reports/status_<name>.md
-tokens: DOCS_ROOT
+tokens: DOCS_ROOT, PROJECT_ID
 ---
 
 # sdlc-status
@@ -472,6 +476,7 @@ status_report.md -> {{DOCS_ROOT}}/reports/status_<name>.md
 
 ## Instructions
 1. Read .harness/current.md (phase, status, active item, notes).
+   If .harness/projects/{{PROJECT_ID}}/current.md exists, prefer it.
 2. Scan {{DOCS_ROOT}}: project.md, architecture.md, features/, tasks/, bugs/,
    plans/, reports/, .harness/.
 3. Read frontmatter per artifact: NAME, VERTIFY, STATUS/RESULT, dates.
@@ -542,7 +547,7 @@ verify_report.md -> {{DOCS_ROOT}}/reports/verify_<name>.md
 5. Fill templates/output/verify_report.md ->
    {{DOCS_ROOT}}/reports/verify_<name>.md.
 6. Do NOT auto-flip VERTIFY; only report. Flips happen in owning skills.
-7. Update .harness/current.md: PHASE=verify, STATUS=<DONE|BLOCKED>.
+7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=verify, STATUS=<DONE|BLOCKED>.
 
 ## Next Step
  - GATE: PASS -> proceed to sdlc-task-implement or sdlc-bug-implement.
@@ -602,8 +607,8 @@ synch_report.md -> {{DOCS_ROOT}}/reports/synch_<name>.md
 4. Record every action in the synch report (path, NEW|UPDATED|REMOVED, hash).
 5. If RERENDER_AFTER_SYNC=YES run sdlc-customize-skills.
 6. If VERIFY_AFTER_RENDER=YES run sdlc-verify.
-7. Update .harness/current.md: PHASE=synch-sdlc-skills, STATUS=DONE, record the
-   upstream commit SHA.
+7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=synch-sdlc-skills, STATUS=DONE,
+   record the upstream commit SHA.
 8. Clean up $TMP.
 
 ## Next Step
@@ -670,7 +675,7 @@ ingest_harness_report.md -> {{DOCS_ROOT}}/reports/ingest_harness_<name>.md
       to the human, and wait. Do not write `.confirm` until answered.
    d. Run:
         scripts/ingest_harness_flow.sh --apply "$TARGET"
-4. NEVER overwrite: .harness/current.md, .harness/project_profile.md, wiki/**
+4. NEVER overwrite: .harness/current.md, {{DOCS_ROOT}}/.harness/project_profile.md, wiki/**
 5. MERGE items: list files needing manual merge; no auto 3-way merge.
 6. Fill templates/output/ingest_harness_report.md; write it under {{DOCS_ROOT}}/reports/.
 7. Update .harness/current.md (if present): PHASE=ingest-harness-flow,
@@ -688,6 +693,78 @@ ingest_harness_report.md -> {{DOCS_ROOT}}/reports/ingest_harness_<name>.md
  - All skills present under $TARGET/{{COMMON_SKILLS_DIR}}.
 EOF
 
+# ---- workspace-ingest: only rendered if WORKSPACE_GATE is set at install time ----
+mkdir -p "$SKILL_DIR/sdlc-workspace-ingest"
+cat > $SKILL_DIR/sdlc-workspace-ingest/SKILL.md <<'EOF'
+---
+name: sdlc-workspace-ingest
+description: enumerate and register every project under the workspace root
+scope: common
+flow: harness-flow
+gate: GATE
+input_template: templates/input/workspace_ingest_input.md
+output_template: templates/output/workspace.md + workspace.yaml entries
+tokens: WORKSPACE_ROOT, PROJECTS_ROOT, DOCS_ROOT
+---
+
+# sdlc-workspace-ingest
+
+> COMMON base skill. Contains {{TOKENS}}. Run `sdlc-customize-skills` first.
+
+## Purpose
+Multi-project entry point. When the target contains more than one project,
+this skill scans PROJECTS_ROOT, asks the human to confirm each project's ID
+and type (brownfields | new), and writes workspace.yaml. Then per-project
+flows run as usual, each scoped by PROJECT_ID.
+
+If the target is single-project, WORKSPACE_GATE is empty and this skill is
+never invoked.
+
+## Pre-step verify
+ - WORKSPACE_ROOT exists and contains PROJECTS_ROOT.
+ - harness.conf has WORKSPACE_GATE=workspace-ingest: GATE (multi-project install).
+
+## Input
+templates/input/workspace_ingest_input.md
+
+## Output
+workspace.md + workspace.yaml entries
+
+## Instructions
+1. Scan {{PROJECTS_ROOT}} for immediate subdirectories (skip dotdirs, node_modules, .git).
+2. For each candidate, collect: name, path, manifest presence (package.json,
+   go.mod, pyproject.toml, Cargo.toml, etc.), README presence.
+3. Present the list to the human; ask for:
+   - PROJECT_ID (snake_case, unique)
+   - type: brownfields | new
+   - enabled: yes | no
+4. Write {{WORKSPACE_ROOT}}/.harness/workspace.yaml:
+     version: 1
+     workspace:
+       name: <name>
+       projects_root: {{PROJECTS_ROOT}}
+       wiki_root: wiki/projects
+       state_root: .harness/projects
+     projects:
+       - id: <id>
+         path: {{PROJECTS_ROOT}}/<dir>
+         type: <brownfields|new>
+         enabled: true
+5. Create per-project scaffold:
+     wiki/projects/<id>/
+     wiki/projects/<id>/.harness/
+     .harness/projects/<id>/current.md   (PHASE=ingest-project, STATUS=PENDING)
+6. Write {{DOCS_ROOT}}/workspace.md summarising the registry.
+7. Update .harness/current.md: PHASE=workspace-ingest, STATUS=DONE.
+
+## Next Step
+ - GATE: for each enabled project -> sdlc-ingest-project with that PROJECT_ID.
+
+## Done when
+ - workspace.yaml lists every enabled project.
+ - Every project has a wiki dir + a per-project current.md.
+ - workspace.md matches workspace.yaml.
+EOF
 
 mkdir -p "$SKILL_DIR/doc-generator"
 cat > $SKILL_DIR/doc-generator/SKILL.md << 'EOF'

@@ -33,7 +33,7 @@ review.md -> {{DOCS_ROOT}}/reports/review_<name>.md
 3. Fill templates/output/review.md with findings tagged [BLOCKER] / [NIT].
 4. VERDICT=APPROVED only with zero blockers; CHANGES_REQUESTED lists a
    concrete checklist that loops back to sdlc-implement.
-5. Update .harness/current.md: PHASE=review, STATUS=DONE.
+5. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=review, STATUS=DONE.
 
 ## Next Step
  - APPROVED -> phase complete; next work item starts at task/bug-implement.

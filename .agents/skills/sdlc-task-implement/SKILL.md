@@ -34,7 +34,7 @@ task.md -> {{DOCS_ROOT}}/tasks/task_<name>.md
    {{DOCS_ROOT}}/tasks/task_<snake_case_name>.md.
 4. Out of Scope is mandatory.
 5. Name the file per {{CONVENTIONS}}.
-6. Update .harness/current.md: PHASE=task-implement, STATUS=DONE.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=task-implement, STATUS=DONE.
 
 ## Next Step
  - GATE: sdlc-plan-task (required).

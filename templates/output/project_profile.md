@@ -12,6 +12,11 @@ VERTIFY: <DRAFT|STABLE>
 # Single source of project-specific values.
 # sdlc-customize-skills substitutes every {{TOKEN}} in the base skills.
 
+## Scope (multi-project)
+ - PROJECT_ID:   {{PROJECT_ID}}
+ - PROJECT_PATH: {{PROJECT_PATH}}
+ - WIKI_ROOT:    {{DOCS_ROOT}}
+
 ## Identity
  - PROJECT_NAME: <name>
  - PROJECT_TYPE: <web-app|cli|library|service|mobile|...>
@@ -32,9 +37,9 @@ VERTIFY: <DRAFT|STABLE>
  - RUN_CMD: <...>
 
 ## Layout
- - SRC_ROOT: <e.g. src/>
- - TEST_ROOT: <e.g. tests/>
- - DOCS_ROOT: ./wiki
+ - SRC_ROOT: <e.g. {{PROJECT_PATH}}/src/>
+ - TEST_ROOT: <e.g. {{PROJECT_PATH}}/tests/>
+ - DOCS_ROOT: {{DOCS_ROOT}}
 
 ## Modules (from architecture.md)
  - <module>: <responsibility> @ <path>

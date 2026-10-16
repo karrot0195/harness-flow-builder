@@ -35,7 +35,7 @@ plan.md -> {{DOCS_ROOT}}/plans/plan_<name>.md
    - Test Strategy proves every acceptance criterion; names {{TEST_ROOT}} files.
    - Risks with mitigations.
 3. Keep steps small enough to review independently.
-4. Update .harness/current.md: PHASE=plan-task, STATUS=DONE.
+4. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=plan-task, STATUS=DONE.
 
 ## Next Step
  - GATE: sdlc-implement (required).

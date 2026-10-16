@@ -8,10 +8,10 @@ RECEIVED_AT: <DATE>
 HARNESS_REPO: https://github.com/karrot0195/harness-flow-builder.git
 REF: main
 
-LOCAL_SKILLS_DIR: ./skills
+LOCAL_SKILLS_DIR: .agents/skills
 TEMPLATES_DIR: ./templates
-PROJECT_SKILLS_DIR: ./wiki/.harness/skills
-PROFILE: ./wiki/.harness/project_profile.md
+PROJECT_SKILLS_DIR: {{DOCS_ROOT}}/.harness/skills
+PROFILE: {{DOCS_ROOT}}/.harness/project_profile.md
 
 MODE: <dry-run|apply>
 RERENDER_AFTER_SYNC: <YES|NO>

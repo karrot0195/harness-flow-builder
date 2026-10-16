@@ -35,9 +35,6 @@ case "$MODE" in
     bash "$SCRIPT_DIR/install.sh" "$TARGET"
     ;;
   ingest)
-    # detect, then:
-    #   - new      -> install immediately
-    #   - existing -> write plan, print it, ask for confirmation
     state="$(bash "$SCRIPT_DIR/ingest_harness_flow.sh" --detect "$TARGET" | head -n1)"
     case "$state" in
       STATE=new)

@@ -36,7 +36,7 @@ implementation.md -> {{DOCS_ROOT}}/reports/implementation_<name>.md (+ code)
    Known Issues, How to Verify).
 6. Follow {{CONVENTIONS}}.
 7. Never touch files outside the plan's scope.
-8. Update .harness/current.md: PHASE=implement, STATUS=<DONE|BLOCKED>.
+8. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=implement, STATUS=<DONE|BLOCKED>.
 
 ## Next Step
  - OPTIONAL: sdlc-test (recommended for behavior change).

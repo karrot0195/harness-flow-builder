@@ -5,20 +5,20 @@ RECEIVED_AT: <DATE>
 
 # Verify Input
 
-DOCS_ROOT: ./wiki
+DOCS_ROOT: {{DOCS_ROOT}}
 
 # Artifacts that MUST be VERTIFY: STABLE
 REQUIRED_STABLE:
- - ./wiki/project.md
- - ./wiki/architecture.md
- - ./wiki/.harness/project_profile.md
- - ./wiki/features/*.md
+ - {{DOCS_ROOT}}/project.md
+ - {{DOCS_ROOT}}/architecture.md
+ - {{DOCS_ROOT}}/.harness/project_profile.md
+ - {{DOCS_ROOT}}/features/*.md
 
 # Reported but not blocking
 OPTIONAL:
- - ./wiki/tasks/*.md
- - ./wiki/bugs/*.md
- - ./wiki/plans/*.md
- - ./wiki/reports/*.md
+ - {{DOCS_ROOT}}/tasks/*.md
+ - {{DOCS_ROOT}}/bugs/*.md
+ - {{DOCS_ROOT}}/plans/*.md
+ - {{DOCS_ROOT}}/reports/*.md
 
 FAIL_ON_DRAFT: YES

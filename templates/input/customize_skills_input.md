@@ -5,11 +5,15 @@ RECEIVED_AT: <DATE>
 
 # Customize Skills Input
 
-PROFILE: ./wiki/.harness/project_profile.md
-ARCHITECTURE: ./wiki/architecture.md
+PROJECT_ID:   {{PROJECT_ID}}
+PROJECT_PATH: {{PROJECT_PATH}}
+DOCS_ROOT:    {{DOCS_ROOT}}
 
-COMMON_SKILLS_DIR: ./skills
-TARGET_SKILLS_DIR: ./wiki/.harness/skills
+PROFILE: {{DOCS_ROOT}}/.harness/project_profile.md
+ARCHITECTURE: {{DOCS_ROOT}}/architecture.md
+
+COMMON_SKILLS_DIR: .agents/skills
+TARGET_SKILLS_DIR: {{DOCS_ROOT}}/.harness/skills
 
 ## Optional overrides (leave blank to use profile values)
 OVERRIDES:

@@ -45,8 +45,8 @@ synch_report.md -> {{DOCS_ROOT}}/reports/synch_<name>.md
 4. Record every action in the synch report (path, NEW|UPDATED|REMOVED, hash).
 5. If RERENDER_AFTER_SYNC=YES run sdlc-customize-skills.
 6. If VERIFY_AFTER_RENDER=YES run sdlc-verify.
-7. Update .harness/current.md: PHASE=synch-sdlc-skills, STATUS=DONE, record the
-   upstream commit SHA.
+7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=synch-sdlc-skills, STATUS=DONE,
+   record the upstream commit SHA.
 8. Clean up $TMP.
 
 ## Next Step

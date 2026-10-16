@@ -6,7 +6,7 @@ flow: harness-flow
 gate: GATE
 input_template: templates/input/arch_define_input.md
 output_template: templates/output/architecture.md + project_profile.md
-tokens: PROJECT_NAME, LANGUAGE, RUNTIME, FRAMEWORK, STORAGE, PACKAGE_MANAGER, SRC_ROOT, TEST_ROOT, DOCS_ROOT
+tokens: PROJECT_NAME, PROJECT_ID, PROJECT_PATH, LANGUAGE, RUNTIME, FRAMEWORK, STORAGE, PACKAGE_MANAGER, SRC_ROOT, TEST_ROOT, DOCS_ROOT
 ---
 
 # sdlc-arch-define
@@ -33,9 +33,11 @@ architecture.md + project_profile.md
    Key Decisions, Open Questions).
 3. Fill templates/output/project_profile.md ->
    {{DOCS_ROOT}}/.harness/project_profile.md. Commands must be exact.
+   Include PROJECT_ID={{PROJECT_ID}}, PROJECT_PATH={{PROJECT_PATH}},
+   WIKI_ROOT={{DOCS_ROOT}}.
 4. Resolve or escalate every Open Question.
 5. Flip project.md + feature docs to VERTIFY: STABLE.
-6. Update .harness/current.md: PHASE=arch-define, STATUS=DONE.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=arch-define, STATUS=DONE.
 
 ## Next Step
  - GATE: sdlc-customize-skills (required), then sdlc-verify.

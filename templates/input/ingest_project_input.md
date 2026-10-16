@@ -6,12 +6,15 @@ RECEIVED_AT: <DATE>
 
 # Ingest Project Input
 
+PROJECT_ID: {{PROJECT_ID}}
+DOCS_ROOT:  {{DOCS_ROOT}}
+
 ## Mode
  - TYPE = brownfields -> fill PROJECT_PATH
  - TYPE = new         -> fill PROJECT_DESCRIPTION
 
 ## brownfields
-PROJECT_PATH: <absolute or relative path to existing project>
+PROJECT_PATH: {{PROJECT_PATH}}
 
 ## new
 PROJECT_DESCRIPTION: |

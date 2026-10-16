@@ -7,7 +7,7 @@ UPDATED_AT: <DATE>
 ---
 VERTIFY: <DRAFT|STABLE>
 
-IMPLEMENTATION: ./wiki/reports/implementation_<NAME>.md
+IMPLEMENTATION: {{DOCS_ROOT}}/reports/implementation_<NAME>.md
 RESULT: <PASS|FAIL|SKIP>
 
 ---

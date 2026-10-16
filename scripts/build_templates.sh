@@ -13,7 +13,7 @@ UPDATED_AT: <DATE>
 ---
 VERTIFY: <DRAFT|STABLE>
 
-IMPLEMENTATION: ./wiki/reports/implementation_<NAME>.md
+IMPLEMENTATION: {{DOCS_ROOT}}/reports/implementation_<NAME>.md
 RESULT: <PASS|FAIL|SKIP>
 
 ---
@@ -43,7 +43,7 @@ VERTIFY: <DRAFT|STABLE>
 
 STATUS: <OPEN|PLANNED|IN_PROGRESS|DONE|CANCELLED>
 PRIORITY: <LOW|MEDIUM|HIGH>
-LINKED_FEATURE: <./wiki/features/<FEATURE>.md or NONE>
+LINKED_FEATURE: <{{DOCS_ROOT}}/features/<FEATURE>.md or NONE>
 
 ---
 
@@ -70,7 +70,7 @@ UPDATED_AT: <DATE>
 ---
 VERTIFY: <DRAFT|STABLE>
 
-PLAN: ./wiki/plans/plan_<NAME>.md
+PLAN: {{DOCS_ROOT}}/plans/plan_<NAME>.md
 VERDICT: <APPROVED|CHANGES_REQUESTED>
 
 ---
@@ -106,9 +106,9 @@ VERTIFY: <DRAFT|STABLE>
 ---
 
 Features:
- - <FEATURE> ./wiki/features/<FEATURE>.md
- - <FEATURE> ./wiki/features/<FEATURE>.md
- - <FEATURE> ./wiki/features/<FEATURE>.md
+ - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
+ - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
+ - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
 EOF
 
 cat > templates/output/project_profile.md <<'EOF'
@@ -125,6 +125,11 @@ VERTIFY: <DRAFT|STABLE>
 
 # Single source of project-specific values.
 # sdlc-customize-skills substitutes every {{TOKEN}} in the base skills.
+
+## Scope (multi-project)
+ - PROJECT_ID:   {{PROJECT_ID}}
+ - PROJECT_PATH: {{PROJECT_PATH}}
+ - WIKI_ROOT:    {{DOCS_ROOT}}
 
 ## Identity
  - PROJECT_NAME: <name>
@@ -146,9 +151,9 @@ VERTIFY: <DRAFT|STABLE>
  - RUN_CMD: <...>
 
 ## Layout
- - SRC_ROOT: <e.g. src/>
- - TEST_ROOT: <e.g. tests/>
- - DOCS_ROOT: ./wiki
+ - SRC_ROOT: <e.g. {{PROJECT_PATH}}/src/>
+ - TEST_ROOT: <e.g. {{PROJECT_PATH}}/tests/>
+ - DOCS_ROOT: {{DOCS_ROOT}}
 
 ## Modules (from architecture.md)
  - <module>: <responsibility> @ <path>
@@ -170,7 +175,7 @@ UPDATED_AT: <DATE>
 ---
 VERTIFY: <DRAFT|STABLE>
 
-WORK_ITEM: <./wiki/tasks/task_X.md | ./wiki/bugs/bug_X.md>
+WORK_ITEM: <{{DOCS_ROOT}}/tasks/task_X.md | {{DOCS_ROOT}}/bugs/bug_X.md>
 ESTIMATED_STEPS: <N>
 
 ---
@@ -199,7 +204,7 @@ UPDATED_AT: <DATE>
 ---
 VERTIFY: <DRAFT|STABLE>
 
-PLAN: ./wiki/plans/plan_<NAME>.md
+PLAN: {{DOCS_ROOT}}/plans/plan_<NAME>.md
 RESULT: <COMPLETED|PARTIAL|BLOCKED>
 
 ---
@@ -312,6 +317,7 @@ VERTIFY: <DRAFT|STABLE>
 
 PHASE: <phase>
 STATUS: <PENDING|IN_PROGRESS|DONE|BLOCKED|SKIPPED>
+PROJECT_ID: {{PROJECT_ID}}
 NEXT_GATE: <skill name>
 
 ---
@@ -385,6 +391,67 @@ UPSTREAM_SHA: <sha>
  - <run customize-skills | done>
 EOF
 
+cat > templates/output/workspace.md <<'EOF'
+---
+NAME: <WORKSPACE NAME>
+DESCRIPTION: multi-project workspace registry
+CREATED_AT: <DATE>
+UPDATED_AT: <DATE>
+
+---
+VERTIFY: <DRAFT|STABLE>
+
+PROJECTS_ROOT: {{PROJECTS_ROOT}}
+DOCS_ROOT: {{DOCS_ROOT}}
+
+---
+
+## Projects
+
+| ID | Path | Type | Enabled | Wiki |
+|---|---|---|---|---|
+| <id> | {{PROJECTS_ROOT}}/<dir> | <brownfields|new> | <yes|no> | {{DOCS_ROOT}}/projects/<id> |
+
+## Notes
+ - <any global constraints or ordering>
+EOF
+
+cat > templates/output/ingest_harness_report.md <<'EOF'
+---
+NAME: ingest-harness-flow report
+DESCRIPTION: target state + reconcile decisions + result
+CREATED_AT: <DATE>
+UPDATED_AT: <DATE>
+
+---
+VERTIFY: <DRAFT|STABLE>
+
+TARGET: <path>
+STATE: <new|existing>
+HARNESS_SRC: <path or repo@sha>
+SKILLS_DIR: <path>
+PROJECT_ID: {{PROJECT_ID}}
+DOCS_ROOT: {{DOCS_ROOT}}
+RESULT: <INSTALLED|RECONCILED|NOOP|BLOCKED>
+
+---
+
+## Classification
+ - <item> - <MISSING|SAME|DIFFERS> - <action taken>
+
+## Protected (untouched)
+ - .harness/current.md
+ - {{DOCS_ROOT}}/.harness/project_profile.md
+ - wiki/**
+
+## Decisions
+ - <item> - <overwrite|keep|merge> - <reason / who confirmed>
+
+## Next
+ - new      -> sdlc-ingest-project
+ - existing -> sdlc-customize-skills (GATE) then sdlc-verify
+EOF
+
 # ---------- INPUT templates ----------
 cat > templates/input/test_input.md <<'EOF'
 ---
@@ -394,7 +461,7 @@ RECEIVED_AT: <DATE>
 
 # Test Input
 
-IMPLEMENTATION: ./wiki/reports/implementation_<NAME>.md
+IMPLEMENTATION: {{DOCS_ROOT}}/reports/implementation_<NAME>.md
 
 AFFECTED_PATHS:
  - <file/dir touched by the implementation>
@@ -428,9 +495,9 @@ RECEIVED_AT: <DATE>
 
 # Review Input
 
-PLAN:           ./wiki/plans/plan_<NAME>.md
-IMPLEMENTATION: ./wiki/reports/implementation_<NAME>.md
-TEST_REPORT:    ./wiki/reports/test_<NAME>.md   (or NONE if skipped)
+PLAN:           {{DOCS_ROOT}}/plans/plan_<NAME>.md
+IMPLEMENTATION: {{DOCS_ROOT}}/reports/implementation_<NAME>.md
+TEST_REPORT:    {{DOCS_ROOT}}/reports/test_<NAME>.md   (or NONE if skipped)
 
 DIFF: <git diff range, e.g. main..HEAD, or patch file path>
 EOF
@@ -443,9 +510,9 @@ RECEIVED_AT: <DATE>
 
 # Plan Task Input
 
-WORK_ITEM: <./wiki/tasks/task_X.md | ./wiki/bugs/bug_X.md>
+WORK_ITEM: <{{DOCS_ROOT}}/tasks/task_X.md | {{DOCS_ROOT}}/bugs/bug_X.md>
 
-ARCHITECTURE: ./wiki/architecture.md
+ARCHITECTURE: {{DOCS_ROOT}}/architecture.md
 
 CONSTRAINTS:
  - <time/scope/tech constraints, or NONE>
@@ -460,12 +527,15 @@ RECEIVED_AT: <DATE>
 
 # Ingest Project Input
 
+PROJECT_ID: {{PROJECT_ID}}
+DOCS_ROOT:  {{DOCS_ROOT}}
+
 ## Mode
  - TYPE = brownfields -> fill PROJECT_PATH
  - TYPE = new         -> fill PROJECT_DESCRIPTION
 
 ## brownfields
-PROJECT_PATH: <absolute or relative path to existing project>
+PROJECT_PATH: {{PROJECT_PATH}}
 
 ## new
 PROJECT_DESCRIPTION: |
@@ -483,7 +553,7 @@ RECEIVED_AT: <DATE>
 
 # Implement Input
 
-PLAN: ./wiki/plans/plan_<NAME>.md
+PLAN: {{DOCS_ROOT}}/plans/plan_<NAME>.md
 
 SCOPE_CONFIRM: <YES|NO - implement everything in the plan, or list subsets below>
 SCOPE_SUBSET:
@@ -500,11 +570,15 @@ RECEIVED_AT: <DATE>
 
 # Customize Skills Input
 
-PROFILE: ./wiki/.harness/project_profile.md
-ARCHITECTURE: ./wiki/architecture.md
+PROJECT_ID:   {{PROJECT_ID}}
+PROJECT_PATH: {{PROJECT_PATH}}
+DOCS_ROOT:    {{DOCS_ROOT}}
 
-COMMON_SKILLS_DIR: ./skills
-TARGET_SKILLS_DIR: ./wiki/.harness/skills
+PROFILE: {{DOCS_ROOT}}/.harness/project_profile.md
+ARCHITECTURE: {{DOCS_ROOT}}/architecture.md
+
+COMMON_SKILLS_DIR: .agents/skills
+TARGET_SKILLS_DIR: {{DOCS_ROOT}}/.harness/skills
 
 ## Optional overrides (leave blank to use profile values)
 OVERRIDES:
@@ -540,11 +614,11 @@ RECEIVED_AT: <DATE>
 
 # Arch Define Input
 
-PROJECT_DOC: ./wiki/project.md
+PROJECT_DOC: {{DOCS_ROOT}}/project.md
 
 FEATURE_DOCS:
- - ./wiki/features/<FEATURE_1>.md
- - ./wiki/features/<FEATURE_2>.md
+ - {{DOCS_ROOT}}/features/<FEATURE_1>.md
+ - {{DOCS_ROOT}}/features/<FEATURE_2>.md
 
 QUESTIONS_FOR_HUMAN: <list anything blocking a decision, or NONE>
 EOF
@@ -557,8 +631,9 @@ RECEIVED_AT: <DATE>
 
 # Status Input
 
-CURRENT_STATE: ./.harness/current.md
-DOCS_ROOT: ./wiki
+CURRENT_STATE: {{DOCS_ROOT}}/.harness/current.md
+DOCS_ROOT: {{DOCS_ROOT}}
+PROJECT_ID: {{PROJECT_ID}}
 
 ACTIVE_ITEM: <task|bug name or id, or ALL>
 VERBOSE: <YES|NO>
@@ -572,21 +647,21 @@ RECEIVED_AT: <DATE>
 
 # Verify Input
 
-DOCS_ROOT: ./wiki
+DOCS_ROOT: {{DOCS_ROOT}}
 
 # Artifacts that MUST be VERTIFY: STABLE
 REQUIRED_STABLE:
- - ./wiki/project.md
- - ./wiki/architecture.md
- - ./wiki/.harness/project_profile.md
- - ./wiki/features/*.md
+ - {{DOCS_ROOT}}/project.md
+ - {{DOCS_ROOT}}/architecture.md
+ - {{DOCS_ROOT}}/.harness/project_profile.md
+ - {{DOCS_ROOT}}/features/*.md
 
 # Reported but not blocking
 OPTIONAL:
- - ./wiki/tasks/*.md
- - ./wiki/bugs/*.md
- - ./wiki/plans/*.md
- - ./wiki/reports/*.md
+ - {{DOCS_ROOT}}/tasks/*.md
+ - {{DOCS_ROOT}}/bugs/*.md
+ - {{DOCS_ROOT}}/plans/*.md
+ - {{DOCS_ROOT}}/reports/*.md
 
 FAIL_ON_DRAFT: YES
 EOF
@@ -602,10 +677,10 @@ RECEIVED_AT: <DATE>
 HARNESS_REPO: https://github.com/karrot0195/harness-flow-builder.git
 REF: main
 
-LOCAL_SKILLS_DIR: ./skills
+LOCAL_SKILLS_DIR: .agents/skills
 TEMPLATES_DIR: ./templates
-PROJECT_SKILLS_DIR: ./wiki/.harness/skills
-PROFILE: ./wiki/.harness/project_profile.md
+PROJECT_SKILLS_DIR: {{DOCS_ROOT}}/.harness/skills
+PROFILE: {{DOCS_ROOT}}/.harness/project_profile.md
 
 MODE: <dry-run|apply>
 RERENDER_AFTER_SYNC: <YES|NO>
@@ -613,7 +688,6 @@ VERIFY_AFTER_RENDER: <YES|NO>
 CONFIRM_REMOVE: <NO|YES>
 EOF
 
-# ---------- ingest-harness-flow ----------
 cat > templates/input/ingest_harness_flow_input.md <<'EOF'
 ---
 SKILL: sdlc-ingest-harness-flow
@@ -645,40 +719,30 @@ COMMON_SKILLS_DIR: .agents/skills
 # Always protected (informational; enforced)
 PROTECTED:
  - .harness/current.md
- - .harness/project_profile.md
+ - {{DOCS_ROOT}}/.harness/project_profile.md
  - wiki/**
 EOF
 
-cat > templates/output/ingest_harness_report.md <<'EOF'
+cat > templates/input/workspace_ingest_input.md <<'EOF'
 ---
-NAME: ingest-harness-flow report
-DESCRIPTION: target state + reconcile decisions + result
-CREATED_AT: <DATE>
-UPDATED_AT: <DATE>
-
----
-VERTIFY: <DRAFT|STABLE>
-
-TARGET: <path>
-STATE: <new|existing>
-HARNESS_SRC: <path or repo@sha>
-SKILLS_DIR: <path>
-RESULT: <INSTALLED|RECONCILED|NOOP|BLOCKED>
-
+SKILL: sdlc-workspace-ingest
+RECEIVED_AT: <DATE>
 ---
 
-## Classification
- - <item> - <MISSING|SAME|DIFFERS> - <action taken>
+# Workspace Ingest Input
 
-## Protected (untouched)
- - .harness/current.md
- - .harness/project_profile.md
- - wiki/**
+WORKSPACE_ROOT: .
+PROJECTS_ROOT: {{PROJECTS_ROOT}}
+DOCS_ROOT: {{DOCS_ROOT}}
 
-## Decisions
- - <item> - <overwrite|keep|merge> - <reason / who confirmed>
+# Candidate projects discovered under PROJECTS_ROOT (pre-filled by the skill)
+CANDIDATES:
+ - <dir> - <manifest?> - <readme?>
 
-## Next
- - new      -> sdlc-ingest-project
- - existing -> sdlc-customize-skills (GATE) then sdlc-verify
+# Human decisions
+PROJECTS:
+ - id: <snake_case>
+   path: {{PROJECTS_ROOT}}/<dir>
+   type: <brownfields|new>
+   enabled: <yes|no>
 EOF

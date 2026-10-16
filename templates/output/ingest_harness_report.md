@@ -11,6 +11,8 @@ TARGET: <path>
 STATE: <new|existing>
 HARNESS_SRC: <path or repo@sha>
 SKILLS_DIR: <path>
+PROJECT_ID: {{PROJECT_ID}}
+DOCS_ROOT: {{DOCS_ROOT}}
 RESULT: <INSTALLED|RECONCILED|NOOP|BLOCKED>
 
 ---
@@ -20,7 +22,7 @@ RESULT: <INSTALLED|RECONCILED|NOOP|BLOCKED>
 
 ## Protected (untouched)
  - .harness/current.md
- - .harness/project_profile.md
+ - {{DOCS_ROOT}}/.harness/project_profile.md
  - wiki/**
 
 ## Decisions

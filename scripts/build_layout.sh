@@ -3,7 +3,6 @@
 set -euo pipefail
 
 mkdir -p .harness
-
 mkdir -p .agents/skills
 
 for s in \
@@ -23,7 +22,5 @@ for s in \
 do
   mkdir -p ".agents/skills/$s"
 done
-
-# canonical consumer location (both in build CWD and target)
 
 mkdir -p templates/input templates/output

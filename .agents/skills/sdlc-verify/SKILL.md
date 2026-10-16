@@ -43,7 +43,7 @@ verify_report.md -> {{DOCS_ROOT}}/reports/verify_<name>.md
 5. Fill templates/output/verify_report.md ->
    {{DOCS_ROOT}}/reports/verify_<name>.md.
 6. Do NOT auto-flip VERTIFY; only report. Flips happen in owning skills.
-7. Update .harness/current.md: PHASE=verify, STATUS=<DONE|BLOCKED>.
+7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=verify, STATUS=<DONE|BLOCKED>.
 
 ## Next Step
  - GATE: PASS -> proceed to sdlc-task-implement or sdlc-bug-implement.

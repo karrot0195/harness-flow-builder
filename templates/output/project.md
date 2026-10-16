@@ -10,6 +10,6 @@ VERTIFY: <DRAFT|STABLE>
 ---
 
 Features:
- - <FEATURE> ./wiki/features/<FEATURE>.md
- - <FEATURE> ./wiki/features/<FEATURE>.md
- - <FEATURE> ./wiki/features/<FEATURE>.md
+ - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
+ - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
+ - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
