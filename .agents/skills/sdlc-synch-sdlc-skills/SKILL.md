@@ -19,6 +19,12 @@ https://github.com/karrot0195/harness-flow-builder.git, diffs the skill tree,
 copies new/updated base skills into the local harness, and then triggers
 sdlc-customize-skills so project copies are re-rendered.
 
+## Paths
+ - UPSTREAM_SKILLS_DIR="$TMP/repo/.agents/skills"                 # skill tree inside the cloned upstream repo
+ - LOCAL_SKILLS_DIR="${LOCAL_SKILLS_DIR:-.agents/skills}" # local harness skills (sync target)
+ - TEMPLATES_DIR="${TEMPLATES_DIR:-.agents/skills}"       # input/output templates
+ - DOCS_ROOT="${DOCS_ROOT:-docs}"
+
 ## Pre-step verify
  - git available; github.com reachable.
  - {{DOCS_ROOT}}/.harness/ writable.
@@ -36,12 +42,12 @@ synch_report.md -> {{DOCS_ROOT}}/reports/synch_<name>.md
      HARNESS_REPO="${HARNESS_REPO:-https://github.com/karrot0195/harness-flow-builder.git}"
      TMP="$(mktemp -d)"
      git clone --depth 1 --branch "${REF:-main}" "$HARNESS_REPO" "$TMP/repo"
-2. Diff "$TMP/repo/skills/" against LOCAL_SKILLS_DIR:
+2. Diff "$TMP/repo/.agents/skills/" against LOCAL_SKILLS_DIR (.agents/skills):
    - NEW      -> present upstream, missing locally.
    - UPDATED  -> SKILL.md differs.
    - REMOVED  -> local-only (report only; delete only if CONFIRM_REMOVE=YES).
 3. For NEW/UPDATED copy SKILL.md + matching templates/input + templates/output
-   into LOCAL_SKILLS_DIR / TEMPLATES_DIR. Never overwrite PROJECT_SKILLS_DIR.
+   from upstream into LOCAL_SKILLS_DIR / TEMPLATES_DIR (both .agents/skills).
 4. Record every action in the synch report (path, NEW|UPDATED|REMOVED, hash).
 5. Set VERTIFY: DRAFT on any newly copied base skill. NEVER set STABLE.
 6. If RERENDER_AFTER_SYNC=YES run sdlc-customize-skills.
