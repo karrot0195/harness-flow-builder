@@ -18,9 +18,12 @@ Bridge COMMON and PROJECT. Substitutes every {{TOKEN}} in each base SKILL.md
 with the matching value from project_profile.md.
 
 ## Pre-step verify
- - project_profile.md exists and is VERTIFY: STABLE.
+ - **architecture.md is VERTIFY: STABLE** (user-confirmed via sdlc-verify).
+ - **project_profile.md is VERTIFY: STABLE** (user-confirmed via sdlc-verify).
+ - **No Open Questions remain in architecture.md or project_profile.md.**
  - COMMON_SKILLS_DIR readable; TARGET_SKILLS_DIR writable.
  - No required command token (TEST_CMD/LINT_CMD/BUILD_CMD) left blank.
+ - If any DRAFT or open question -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/customize_skills_input.md
@@ -36,12 +39,15 @@ templates/input/customize_skills_input.md
    c. Replace base warning with rendered-by notice + DATE.
    d. Write to TARGET_SKILLS_DIR/<name>/SKILL.md.
 3. Fail if any {{TOKEN}} remains.
-4. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=customize-skills, STATUS=DONE,
-   TARGET_SKILLS_DIR recorded.
+4. Rendered skills inherit VERTIFY: DRAFT — do NOT set STABLE.
+5. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=customize-skills,
+   STATUS=DONE, TARGET_SKILLS_DIR recorded.
 
 ## Next Step
- - GATE: sdlc-verify (required).
+ - GATE: sdlc-verify (required) — must PASS with user confirmation on the
+   rendered skills before any task/bug work begins.
 
 ## Done when
  - Every base skill has a rendered copy.
  - `grep -r '{{' TARGET_SKILLS_DIR` returns nothing.
+ - sdlc-verify PASSED with recorded user confirmation.

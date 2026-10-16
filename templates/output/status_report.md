@@ -5,10 +5,10 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 PHASE: <phase>
-STATUS: <PENDING|IN_PROGRESS|DONE|BLOCKED|SKIPPED>
+STATUS: <PENDING|IN_PROGRESS|DONE|DONE_WITH_OPEN_QUESTIONS|BLOCKED|SKIPPED>
 PROJECT_ID: {{PROJECT_ID}}
 NEXT_GATE: <skill name>
 
@@ -20,8 +20,16 @@ NEXT_GATE: <skill name>
 ## Artifact Inventory
  - <path> - VERTIFY: <DRAFT|STABLE> - <STATUS/RESULT>
 
+## Open Questions (all artifacts)
+ - <file> - <question> - owner: <skill> - status: <open|resolved @ timestamp>
+
+## Verify Confirmations
+ - <file> -> <y|N> @ <timestamp>
+
 ## Blockers
  - <or NONE>
 
 ## Next Gate Requirements
- - <what must be true to pass the next gate>
+ - Previous phase artifacts all VERTIFY: STABLE (user-confirmed via sdlc-verify)
+ - No open questions remain
+ - sdlc-verify returned RESULT=PASS

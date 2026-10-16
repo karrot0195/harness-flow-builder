@@ -18,7 +18,8 @@ for s in \
   sdlc-test \
   sdlc-status \
   sdlc-verify \
-  sdlc-synch-sdlc-skills
+  sdlc-synch-sdlc-skills \
+  doc-generator
 do
   mkdir -p ".agents/skills/$s"
 done

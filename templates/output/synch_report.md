@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 HARNESS_REPO: https://github.com/karrot0195/harness-flow-builder.git
 UPSTREAM_SHA: <sha>
@@ -21,5 +21,8 @@ UPSTREAM_SHA: <sha>
 ## Actions Taken
  - <copy/render/verify steps>
 
+## Open Questions
+ - NONE
+
 ## Next
- - <run customize-skills | done>
+ - <run customize-skills | run sdlc-verify (user confirmation required) | done>

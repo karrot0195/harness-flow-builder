@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 PLAN: {{DOCS_ROOT}}/plans/plan_<NAME>.md
 RESULT: <COMPLETED|PARTIAL|BLOCKED>
@@ -26,6 +26,9 @@ RESULT: <COMPLETED|PARTIAL|BLOCKED>
 
 ## Known Issues / Leftovers
  - <or NONE>
+
+## Open Questions
+ - NONE
 
 ## How to Verify
  <exact commands/steps for the next phase>

@@ -22,3 +22,7 @@ PROJECT_DESCRIPTION: |
 
 ## Constraints (optional)
  - <tech preferences, must-haves, out-of-scope>
+
+# Note: the output project.md + feature docs will be VERTIFY: DRAFT.
+# Before arch-define starts, the user must run sdlc-verify and confirm
+# DRAFT -> STABLE for each required file, and answer any Open Questions.

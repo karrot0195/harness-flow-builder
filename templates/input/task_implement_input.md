@@ -13,3 +13,7 @@ ACCEPTANCE_CRITERIA:
  - <criterion 2>
 
 PRIORITY: <LOW|MEDIUM|HIGH>
+
+# Precondition (enforced)
+# - sdlc-verify PASSED for ingest/arch/customize chain.
+# - No Open Questions anywhere in {{DOCS_ROOT}}.

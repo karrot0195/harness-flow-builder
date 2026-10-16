@@ -40,18 +40,12 @@ mkdir -p "$TARGET/$DOCS_ROOT"
 # Copy the portable tree. Never clobber existing consumer content.
 if [ -d "$SRC/.agents/skills" ]; then
   mkdir -p "$TARGET/.agents/skills"
-  cp -R "$SRC//.agents/skills/." "$TARGET/.agents/skills/"
+  cp -R "$SRC/.agents/skills/." "$TARGET/.agents/skills/"
 fi
 
 if [ -d "$SRC/templates" ]; then
   mkdir -p "$TARGET/templates"
   cp -R "$SRC/templates/." "$TARGET/templates/"
-fi
-
-if [ -d "$SRC/scripts" ]; then
-  mkdir -p "$TARGET/scripts"
-  cp -R "$SRC/scripts/." "$TARGET/scripts/"
-  chmod +x "$TARGET"/scripts/*.sh 2>/dev/null || true
 fi
 
 mkdir -p "$TARGET/.harness"
@@ -61,7 +55,6 @@ if [ -f "$SRC/.harness/flow.md" ]; then
   if [ ! -f "$TARGET/.harness/flow.md" ]; then
     cp "$SRC/.harness/flow.md" "$TARGET/.harness/flow.md"
   fi
-  # Replace token in place (no-op when empty).
   tmp="$(mktemp)"
   sed "s|{{WORKSPACE_GATE}}|$WORKSPACE_GATE|g" \
       "$TARGET/.harness/flow.md" > "$tmp" && mv "$tmp" "$TARGET/.harness/flow.md"
@@ -89,6 +82,8 @@ UPDATED_AT: $(date -u +%Y-%m-%dT%H:%M:%SZ)
  - Skills in use: <common base | $DOCS_ROOT/.harness/skills (project)>
  - Input artifact: <path to filled input template>
  - Output artifact(s): <path(s) to produced artifacts>
+ - Open Questions: <NONE | list with owner + status>
+ - Verify confirmations: <file -> y/N @ timestamp>
  - Notes: <blockers, skip reasons, decisions>
 EOF
 fi
@@ -107,6 +102,10 @@ UPDATED_AT: $(date -u +%Y-%m-%dT%H:%M:%SZ)
 ---
 
 # Current state ($PROJECT_ID)
+
+ - Active item: <task|bug name or id>
+ - Open Questions: <NONE | list with owner + status>
+ - Verify confirmations: <file -> y/N @ timestamp>
 EOF
   fi
 fi
@@ -118,3 +117,7 @@ echo "  docs_root:    $DOCS_ROOT"
 echo "  workspace:    ${WORKSPACE_GATE:+yes}${WORKSPACE_GATE:-no}"
 echo
 echo "Next: sdlc-ingest-harness-flow -> sdlc-ingest-project -> sdlc-arch-define -> sdlc-customize-skills -> sdlc-verify"
+echo
+echo "ENFORCED: DRAFT->STABLE only via sdlc-verify (user confirm)."
+echo "ENFORCED: Open Questions resolved before next phase."
+echo "ENFORCED: Next phase requires previous phase STABLE + ready."

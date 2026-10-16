@@ -12,3 +12,8 @@ FEATURE_DOCS:
  - {{DOCS_ROOT}}/features/<FEATURE_2>.md
 
 QUESTIONS_FOR_HUMAN: <list anything blocking a decision, or NONE>
+
+# Precondition (enforced)
+# - project.md + all feature docs are VERTIFY: STABLE (user-confirmed via
+#   sdlc-verify).
+# - No Open Questions remain in project.md or any feature doc.

@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 ---
 
@@ -49,3 +49,6 @@ VERTIFY: <DRAFT|STABLE>
  - commit style: <...>
  - test style: <...>
  - other: <...>
+
+## Open Questions
+ - NONE

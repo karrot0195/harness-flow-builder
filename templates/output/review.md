@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 PLAN: {{DOCS_ROOT}}/plans/plan_<NAME>.md
 VERDICT: <APPROVED|CHANGES_REQUESTED>
@@ -24,6 +24,9 @@ VERDICT: <APPROVED|CHANGES_REQUESTED>
 
 ## Required Changes
  - <must fix before APPROVED, or NONE>
+
+## Open Questions
+ - NONE
 
 ## Approval
  - status: <APPROVED|CHANGES_REQUESTED>

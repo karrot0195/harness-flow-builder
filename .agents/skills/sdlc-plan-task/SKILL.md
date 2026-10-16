@@ -18,8 +18,11 @@ Translate a task/bug into ordered, verifiable steps sdlc-implement can execute
 without further questions.
 
 ## Pre-step verify
- - WORK_ITEM exists with acceptance criteria.
- - ARCHITECTURE + project_profile.md exist and are STABLE.
+ - WORK_ITEM exists with acceptance criteria and is **VERTIFY: STABLE**
+   (user-confirmed via sdlc-verify).
+ - **No Open Questions remain in WORK_ITEM.**
+ - ARCHITECTURE + project_profile.md exist and are **STABLE** (user-confirmed).
+ - If any DRAFT or open question -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/plan_task_input.md
@@ -35,11 +38,21 @@ plan.md -> {{DOCS_ROOT}}/plans/plan_<name>.md
    - Test Strategy proves every acceptance criterion; names {{TEST_ROOT}} files.
    - Risks with mitigations.
 3. Keep steps small enough to review independently.
-4. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=plan-task, STATUS=DONE.
+4. Fill the mandatory `## Open Questions` section (unresolved design decisions).
+   If none, write `- NONE`.
+5. Set VERTIFY: DRAFT. NEVER set STABLE here.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=plan-task,
+   STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE.
 
 ## Next Step
- - GATE: sdlc-implement (required).
+ - GATE: sdlc-implement (required) — BUT ONLY AFTER:
+   a. Every Open Question in the plan resolved with the user (recorded).
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for the plan.
+   c. sdlc-verify returns RESULT=PASS.
+ - If any Open Question is still open -> STOP. Ask the user. Do not proceed.
 
 ## Done when
  - Every acceptance criterion maps to a step + a test line.
  - Every step has touch + verify using project commands.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation.

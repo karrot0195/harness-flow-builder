@@ -92,6 +92,7 @@ if [ "$MODE" = "plan" ]; then
     echo "- \`.harness/current.md\`"
     echo "- \`.harness/projects/*/current.md\`"
     echo "- \`*/wiki/**\`"
+    echo "- All \`VERTIFY: STABLE\` artifacts"
     echo
     echo "## Confirm"
     echo "Write \`.harness/ingest-harness-flow.confirm\`, one line per item:"

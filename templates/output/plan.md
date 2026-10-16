@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 WORK_ITEM: <{{DOCS_ROOT}}/tasks/task_X.md | {{DOCS_ROOT}}/bugs/bug_X.md>
 ESTIMATED_STEPS: <N>
@@ -24,3 +24,6 @@ ESTIMATED_STEPS: <N>
 
 ## Risks
  - <risk> -> mitigation: <...>
+
+## Open Questions
+ - NONE

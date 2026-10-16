@@ -30,3 +30,4 @@ PROTECTED:
  - .harness/current.md
  - {{DOCS_ROOT}}/.harness/project_profile.md
  - wiki/**
+ - All VERTIFY: STABLE artifacts

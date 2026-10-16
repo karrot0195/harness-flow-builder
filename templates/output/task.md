@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 STATUS: <OPEN|PLANNED|IN_PROGRESS|DONE|CANCELLED>
 PRIORITY: <LOW|MEDIUM|HIGH>
@@ -21,6 +21,9 @@ LINKED_FEATURE: <{{DOCS_ROOT}}/features/<FEATURE>.md or NONE>
 
 ## Out of Scope
  - <explicit non-goals>
+
+## Open Questions
+ - NONE
 
 ## Notes
  - <links, context>

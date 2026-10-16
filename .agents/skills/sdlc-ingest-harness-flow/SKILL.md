@@ -51,7 +51,8 @@ ingest_harness_report.md -> {{DOCS_ROOT}}/reports/ingest_harness_<name>.md
       to the human, and wait. Do not write `.confirm` until answered.
    d. Run:
         scripts/ingest_harness_flow.sh --apply "$TARGET"
-4. NEVER overwrite: .harness/current.md, {{DOCS_ROOT}}/.harness/project_profile.md, wiki/**
+4. NEVER overwrite: .harness/current.md, {{DOCS_ROOT}}/.harness/project_profile.md,
+   wiki/**, and any artifact with VERTIFY: STABLE.
 5. MERGE items: list files needing manual merge; no auto 3-way merge.
 6. Fill templates/output/ingest_harness_report.md; write it under {{DOCS_ROOT}}/reports/.
 7. Update .harness/current.md (if present): PHASE=ingest-harness-flow,
@@ -59,7 +60,8 @@ ingest_harness_report.md -> {{DOCS_ROOT}}/reports/ingest_harness_<name>.md
 
 ## Next Step
  - GATE: STATE=new      -> sdlc-ingest-project
- - GATE: STATE=existing -> sdlc-customize-skills, then sdlc-verify
+ - GATE: STATE=existing -> sdlc-customize-skills, then sdlc-verify (user
+   confirmation required).
 
 ## Done when
  - Report exists with STATE, per-item classification, RESULT.

@@ -28,9 +28,33 @@ synch-sdlc-skills: OPTIONAL (on harness update)
  - GATE: must complete before next phase. Fail -> stay, fix input, retry.
  - OPTIONAL: may be skipped; log the reason in .harness/current.md.
 
+# STABLE gate (ENFORCED)
+ - DRAFT -> STABLE transition is performed ONLY by sdlc-verify.
+ - sdlc-verify MUST ask the user for explicit confirmation (y/N) per artifact
+   before flipping VERTIFY: DRAFT -> STABLE.
+ - No other skill may self-promote an artifact to STABLE.
+ - Every STABLE flip is recorded: file, user answer, timestamp.
+
+# Open Questions gate (ENFORCED)
+ - Any unresolved "Open Questions" / "QUESTIONS_FOR_HUMAN" / "Blockers" /
+   "Root Cause Hypotheses" in the current phase's artifacts MUST be resolved
+   with the user BEFORE the next phase starts.
+ - Resolution is recorded in .harness/current.md "Open Questions" with
+   owner, status, and timestamp.
+ - If any remain open -> STOP. Do not advance.
+
+# Phase-advance gate (ENFORCED)
+ - The next phase may start ONLY when:
+   a. Every required artifact from the current phase is VERTIFY: STABLE
+      (user-confirmed via sdlc-verify).
+   b. No Open Questions remain anywhere in the current phase.
+   c. sdlc-verify returned PASS for the current phase.
+ - Otherwise: STOP, run sdlc-verify, ask user.
+
 # Every skill ends with:
  - Pre-step verify: checks that must hold before running.
  - Next Step: GATE (required) or OPTIONAL (skippable).
+ - Exit criteria: STABLE + no open questions + user confirmed.
 
 # Two tiers of skills
  1. COMMON  -> skills/sdlc-*/SKILL.md (contain {{TOKENS}})
@@ -47,7 +71,7 @@ cat > .harness/current.md <<'EOF'
 ---
 FLOW: harness-flow
 PHASE: <ingest-project|arch-define|customize-skills|verify|status|synch-sdlc-skills|task-implement|bug-implement|plan-task|implement|test|review>
-STATUS: <PENDING|IN_PROGRESS|DONE|BLOCKED|SKIPPED>
+STATUS: <PENDING|IN_PROGRESS|DONE|DONE_WITH_OPEN_QUESTIONS|BLOCKED|SKIPPED>
 PROJECT_ID: {{PROJECT_ID}}
 UPDATED_AT: <DATE>
 ---
@@ -58,6 +82,8 @@ UPDATED_AT: <DATE>
  - Skills in use: <common base | {{DOCS_ROOT}}/.harness/skills (project)>
  - Input artifact: <path to filled input template>
  - Output artifact(s): <path(s) to produced artifacts>
+ - Open Questions: <NONE | list: <file> - <question> - owner: <skill> - status: <open|resolved @ timestamp>>
+ - Verify confirmations: <file -> y/N @ timestamp>
  - Notes: <blockers, skip reasons, decisions>
 EOF
 
@@ -67,6 +93,17 @@ cat > README.md <<'EOF'
 A markdown-driven SDLC harness for AI agents (or humans) working on any
 software project. Every skill has a SKILL.md, an input template, and an
 output template.
+
+## Enforced rules
+
+1. **DRAFT -> STABLE only via sdlc-verify.** No skill may self-promote an
+   artifact to STABLE. sdlc-verify asks the user to confirm each flip (y/N)
+   and records the answer + timestamp.
+2. **Open Questions gate.** Any unresolved open questions in the current
+   phase must be resolved with the user before the next phase starts.
+3. **Phase-advance gate.** The next phase starts only when the previous
+   phase's required artifacts are all VERTIFY: STABLE (user-confirmed) and
+   no open questions remain.
 
 ## Layout (this repo = BUILDER)
 
@@ -106,7 +143,7 @@ synch-sdlc-skills: OPTIONAL (when the harness repo updates)
 | sdlc-ingest-project | path (brownfield) or description (new) | {{DOCS_ROOT}}/project.md + features/*.md |
 | sdlc-arch-define | project.md + features | {{DOCS_ROOT}}/architecture.md + .harness/project_profile.md |
 | sdlc-customize-skills | profile + base skills | {{DOCS_ROOT}}/.harness/skills/sdlc-*/SKILL.md |
-| sdlc-verify | wiki artifacts | {{DOCS_ROOT}}/reports/verify_*.md |
+| sdlc-verify | wiki artifacts | {{DOCS_ROOT}}/reports/verify_*.md (+ STABLE flips) |
 | sdlc-status | .harness/current.md + wiki | {{DOCS_ROOT}}/reports/status_*.md |
 | sdlc-synch-sdlc-skills | upstream harness repo | synced base skills + {{DOCS_ROOT}}/reports/synch_*.md |
 | sdlc-task-implement | feature request | {{DOCS_ROOT}}/tasks/task_*.md |
@@ -116,8 +153,9 @@ synch-sdlc-skills: OPTIONAL (when the harness repo updates)
 | sdlc-test | implementation report | {{DOCS_ROOT}}/reports/test_*.md |
 | sdlc-review | plan + impl + tests | {{DOCS_ROOT}}/reports/review_*.md |
 
-Rules: only sdlc-implement edits source. Every skill ends with a Pre-step
-verify and a Next Step (GATE or OPTIONAL).
+Rules: only sdlc-implement edits source. Only sdlc-verify flips DRAFT->STABLE
+(with user confirmation). Every skill ends with a Pre-step verify and a Next
+Step (GATE or OPTIONAL).
 
 ## Build the harness
 

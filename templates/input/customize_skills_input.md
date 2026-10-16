@@ -18,3 +18,8 @@ TARGET_SKILLS_DIR: {{DOCS_ROOT}}/.harness/skills
 ## Optional overrides (leave blank to use profile values)
 OVERRIDES:
  - TOKEN: <value>
+
+# Precondition (enforced)
+# - architecture.md is VERTIFY: STABLE (user-confirmed).
+# - project_profile.md is VERTIFY: STABLE (user-confirmed).
+# - No Open Questions remain in either file.

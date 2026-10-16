@@ -30,6 +30,7 @@ feature doc per capability. Entry point of the flow; feeds arch-define.
  - TYPE=brownfields -> PROJECT_PATH exists and is readable.
  - TYPE=new         -> PROJECT_DESCRIPTION non-empty.
  - {{DOCS_ROOT}} creatable (run `./scripts/generate_source.sh --install .` if missing).
+ - This is the entry phase: no previous-phase STABLE check required.
 
 ## Input
 templates/input/ingest_project_input.md
@@ -44,17 +45,30 @@ project.md + feature.md (one per feature)
 4. Fill templates/output/feature.md per feature ->
    {{DOCS_ROOT}}/features/feature_<snake_case_name>.md.
 5. Fill templates/output/project.md -> {{DOCS_ROOT}}/project.md.
-6. Set VERTIFY: DRAFT on all new files.
-7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=ingest-project, STATUS=DONE.
-   (Also mirror the phase into .harness/projects/{{PROJECT_ID}}/current.md if
-   the target is multi-project.)
+6. Set VERTIFY: DRAFT on all new files. NEVER set STABLE here.
+7. Fill the mandatory `## Open Questions` section in every output file:
+   - List every missing fact, ambiguity, or unknown.
+   - If none, write `- NONE`.
+8. Mirror the open questions into {{DOCS_ROOT}}/.harness/current.md
+   "Open Questions" with owner = sdlc-ingest-project.
+9. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=ingest-project,
+   STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE.
+   (Mirror into .harness/projects/{{PROJECT_ID}}/current.md if multi-project.)
 
 ## Next Step
- - GATE: sdlc-arch-define (required).
+ - GATE: sdlc-arch-define (required) — BUT ONLY AFTER:
+   a. Every Open Question in project.md + all feature docs is resolved with
+      the user (record answer + timestamp in .harness/current.md).
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for
+      project.md and every feature doc.
+   c. sdlc-verify returns RESULT=PASS.
+ - If any Open Question is still open -> STOP. Ask the user. Do not proceed.
 
 ## Done when
  - {{DOCS_ROOT}}/project.md lists every feature path on disk.
- - Every feature doc matches the template.
+ - Every feature doc matches the template and has a filled Open Questions section.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation for every required file.
 EOF
 
 cat > $SKILL_DIR/sdlc-arch-define/SKILL.md <<'EOF'
@@ -79,7 +93,9 @@ the variable file that customizes all later skills.
 
 ## Pre-step verify
  - project.md + all feature docs exist (from ingest-project).
- - No unresolved Open Questions carried in.
+ - **project.md + all feature docs are VERTIFY: STABLE** (user-confirmed via sdlc-verify).
+ - **No Open Questions remain in project.md or any feature doc.**
+ - If any DRAFT or open question -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/arch_define_input.md
@@ -95,17 +111,26 @@ architecture.md + project_profile.md
    {{DOCS_ROOT}}/.harness/project_profile.md. Commands must be exact.
    Include PROJECT_ID={{PROJECT_ID}}, PROJECT_PATH={{PROJECT_PATH}},
    WIKI_ROOT={{DOCS_ROOT}}.
-4. Resolve or escalate every Open Question.
-5. Flip project.md + feature docs to VERTIFY: STABLE.
-6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=arch-define, STATUS=DONE.
+4. Fill the mandatory `## Open Questions` section in both outputs.
+   If none, write `- NONE`.
+5. Set VERTIFY: DRAFT on all new files. NEVER set STABLE here.
+6. Mirror open questions into {{DOCS_ROOT}}/.harness/current.md.
+7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=arch-define,
+   STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE.
 
 ## Next Step
- - GATE: sdlc-customize-skills (required), then sdlc-verify.
+ - GATE: sdlc-customize-skills (required) — BUT ONLY AFTER:
+   a. Every Open Question in architecture.md + project_profile.md resolved
+      with the user (recorded).
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for both files.
+   c. sdlc-verify returns RESULT=PASS.
+ - If any Open Question is still open -> STOP. Ask the user. Do not proceed.
 
 ## Done when
  - architecture.md + project_profile.md exist; profile commands run clean.
- - Every feature maps to >=1 module; profile VERTIFY: STABLE.
- - No unresolved Open Questions.
+ - Every feature maps to >=1 module.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation.
 EOF
 
 cat > $SKILL_DIR/sdlc-customize-skills/SKILL.md <<'EOF'
@@ -129,9 +154,12 @@ Bridge COMMON and PROJECT. Substitutes every {{TOKEN}} in each base SKILL.md
 with the matching value from project_profile.md.
 
 ## Pre-step verify
- - project_profile.md exists and is VERTIFY: STABLE.
+ - **architecture.md is VERTIFY: STABLE** (user-confirmed via sdlc-verify).
+ - **project_profile.md is VERTIFY: STABLE** (user-confirmed via sdlc-verify).
+ - **No Open Questions remain in architecture.md or project_profile.md.**
  - COMMON_SKILLS_DIR readable; TARGET_SKILLS_DIR writable.
  - No required command token (TEST_CMD/LINT_CMD/BUILD_CMD) left blank.
+ - If any DRAFT or open question -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/customize_skills_input.md
@@ -147,15 +175,18 @@ templates/input/customize_skills_input.md
    c. Replace base warning with rendered-by notice + DATE.
    d. Write to TARGET_SKILLS_DIR/<name>/SKILL.md.
 3. Fail if any {{TOKEN}} remains.
-4. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=customize-skills, STATUS=DONE,
-   TARGET_SKILLS_DIR recorded.
+4. Rendered skills inherit VERTIFY: DRAFT — do NOT set STABLE.
+5. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=customize-skills,
+   STATUS=DONE, TARGET_SKILLS_DIR recorded.
 
 ## Next Step
- - GATE: sdlc-verify (required).
+ - GATE: sdlc-verify (required) — must PASS with user confirmation on the
+   rendered skills before any task/bug work begins.
 
 ## Done when
  - Every base skill has a rendered copy.
  - `grep -r '{{' TARGET_SKILLS_DIR` returns nothing.
+ - sdlc-verify PASSED with recorded user confirmation.
 EOF
 
 cat > $SKILL_DIR/sdlc-task-implement/SKILL.md <<'EOF'
@@ -179,8 +210,11 @@ Create the canonical task artifact for a feature request so planning can
 consume it deterministically.
 
 ## Pre-step verify
- - sdlc-verify passed (no required DRAFT artifacts).
+ - **sdlc-verify PASSED for the ingest/arch/customize chain** (all required
+   artifacts STABLE and user-confirmed).
+ - **No Open Questions anywhere in {{DOCS_ROOT}}** (verified in last verify run).
  - REQUEST present and >=1 ACCEPTANCE_CRITERIA.
+ - If any DRAFT or open question -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/task_implement_input.md
@@ -194,15 +228,24 @@ task.md -> {{DOCS_ROOT}}/tasks/task_<name>.md
 3. Fill templates/output/task.md ->
    {{DOCS_ROOT}}/tasks/task_<snake_case_name>.md.
 4. Out of Scope is mandatory.
-5. Name the file per {{CONVENTIONS}}.
-6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=task-implement, STATUS=DONE.
+5. Fill the mandatory `## Open Questions` section. If none, write `- NONE`.
+6. Set VERTIFY: DRAFT. NEVER set STABLE here.
+7. Name the file per {{CONVENTIONS}}.
+8. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=task-implement,
+   STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE.
 
 ## Next Step
- - GATE: sdlc-plan-task (required).
+ - GATE: sdlc-plan-task (required) — BUT ONLY AFTER:
+   a. Every Open Question in the task file resolved with the user (recorded).
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for the task file.
+   c. sdlc-verify returns RESULT=PASS.
+ - If any Open Question is still open -> STOP. Ask the user. Do not proceed.
 
 ## Done when
  - Task file has >=1 acceptance criterion + explicit out-of-scope.
  - LINKED_FEATURE points to a real feature or is marked new candidate.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation.
 EOF
 
 cat > $SKILL_DIR/sdlc-bug-implement/SKILL.md <<'EOF'
@@ -225,8 +268,11 @@ tokens: DOCS_ROOT, SRC_ROOT, LINT_CMD, CONVENTIONS
 Create the canonical bug artifact so planning treats bugs and tasks identically.
 
 ## Pre-step verify
- - sdlc-verify passed.
+ - **sdlc-verify PASSED for the ingest/arch/customize chain** (all required
+   artifacts STABLE and user-confirmed).
+ - **No Open Questions anywhere in {{DOCS_ROOT}}**.
  - SUMMARY + REPRO_STEPS + EXPECTED/ACTUAL present.
+ - If any DRAFT or open question -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/bug_implement_input.md
@@ -239,15 +285,25 @@ bug.md -> {{DOCS_ROOT}}/bugs/bug_<name>.md
 2. Try to reproduce ({{RUN_CMD}} or read affected {{SRC_ROOT}}).
 3. Fill templates/output/bug.md -> {{DOCS_ROOT}}/bugs/bug_<snake_case_name>.md
    with >=1 verifiable hypothesis grounded in {{SRC_ROOT}}.
-4. Follow {{CONVENTIONS}}.
-5. CRITICAL -> flag in {{DOCS_ROOT}}/.harness/current.md Notes.
-6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=bug-implement, STATUS=DONE.
+4. Fill the mandatory `## Open Questions` section (unresolved hypotheses,
+   missing env info). If none, write `- NONE`.
+5. Set VERTIFY: DRAFT. NEVER set STABLE here.
+6. Follow {{CONVENTIONS}}.
+7. CRITICAL -> flag in {{DOCS_ROOT}}/.harness/current.md Notes.
+8. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=bug-implement,
+   STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE.
 
 ## Next Step
- - GATE: sdlc-plan-task (required).
+ - GATE: sdlc-plan-task (required) — BUT ONLY AFTER:
+   a. Every Open Question in the bug file resolved with the user (recorded).
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for the bug file.
+   c. sdlc-verify returns RESULT=PASS.
+ - If any Open Question is still open -> STOP. Ask the user. Do not proceed.
 
 ## Done when
  - Bug file has complete repro + >=1 grounded hypothesis; severity recorded.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation.
 EOF
 
 cat > $SKILL_DIR/sdlc-plan-task/SKILL.md <<'EOF'
@@ -271,8 +327,11 @@ Translate a task/bug into ordered, verifiable steps sdlc-implement can execute
 without further questions.
 
 ## Pre-step verify
- - WORK_ITEM exists with acceptance criteria.
- - ARCHITECTURE + project_profile.md exist and are STABLE.
+ - WORK_ITEM exists with acceptance criteria and is **VERTIFY: STABLE**
+   (user-confirmed via sdlc-verify).
+ - **No Open Questions remain in WORK_ITEM.**
+ - ARCHITECTURE + project_profile.md exist and are **STABLE** (user-confirmed).
+ - If any DRAFT or open question -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/plan_task_input.md
@@ -288,14 +347,24 @@ plan.md -> {{DOCS_ROOT}}/plans/plan_<name>.md
    - Test Strategy proves every acceptance criterion; names {{TEST_ROOT}} files.
    - Risks with mitigations.
 3. Keep steps small enough to review independently.
-4. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=plan-task, STATUS=DONE.
+4. Fill the mandatory `## Open Questions` section (unresolved design decisions).
+   If none, write `- NONE`.
+5. Set VERTIFY: DRAFT. NEVER set STABLE here.
+6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=plan-task,
+   STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE.
 
 ## Next Step
- - GATE: sdlc-implement (required).
+ - GATE: sdlc-implement (required) — BUT ONLY AFTER:
+   a. Every Open Question in the plan resolved with the user (recorded).
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for the plan.
+   c. sdlc-verify returns RESULT=PASS.
+ - If any Open Question is still open -> STOP. Ask the user. Do not proceed.
 
 ## Done when
  - Every acceptance criterion maps to a step + a test line.
  - Every step has touch + verify using project commands.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation.
 EOF
 
 cat > $SKILL_DIR/sdlc-implement/SKILL.md <<'EOF'
@@ -319,8 +388,11 @@ The only skill allowed to edit project source. Turns a plan into real code and
 an honest change report.
 
 ## Pre-step verify
- - PLAN exists, VERTIFY: STABLE, every step has touch + verify.
+ - **PLAN exists and is VERTIFY: STABLE** (user-confirmed via sdlc-verify).
+ - **No Open Questions remain in the plan.**
+ - Every step has touch + verify.
  - SCOPE_CONFIRM answered; branch/dir clean or dedicated.
+ - If plan is DRAFT or has open questions -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/implement_input.md
@@ -335,17 +407,27 @@ implementation.md -> {{DOCS_ROOT}}/reports/implementation_<name>.md (+ code)
 4. Before finishing run {{LINT_CMD}} and {{BUILD_CMD}}; fix or log failures.
 5. Fill templates/output/implementation.md (Files Changed M/A/D, Commands Run,
    Known Issues, How to Verify).
-6. Follow {{CONVENTIONS}}.
-7. Never touch files outside the plan's scope.
-8. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=implement, STATUS=<DONE|BLOCKED>.
+6. Fill the mandatory `## Open Questions` section (unresolved issues found
+   during implementation). If none, write `- NONE`.
+7. Set VERTIFY: DRAFT. NEVER set STABLE here.
+8. Follow {{CONVENTIONS}}.
+9. Never touch files outside the plan's scope.
+10. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=implement,
+    STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE or BLOCKED.
 
 ## Next Step
  - OPTIONAL: sdlc-test (recommended for behavior change).
- - GATE: sdlc-review (required if test skipped).
+ - GATE: sdlc-review (required if test skipped) — BUT ONLY AFTER:
+   a. Every Open Question in the implementation report resolved with the user.
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for the report.
+   c. sdlc-verify returns RESULT=PASS.
+ - If any Open Question is still open -> STOP. Ask the user. Do not proceed.
 
 ## Done when
  - Report exists; every executed step has its verify result.
  - Files Changed matches the diff; lint/build results recorded.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation.
 EOF
 
 cat > $SKILL_DIR/sdlc-test/SKILL.md <<'EOF'
@@ -369,8 +451,11 @@ Optional phase. Objective pass/fail evidence for review. Skip only with a
 logged reason.
 
 ## Pre-step verify
- - IMPLEMENTATION report exists with RESULT in {COMPLETED, PARTIAL}.
+ - **IMPLEMENTATION report is VERTIFY: STABLE** (user-confirmed via sdlc-verify)
+   and RESULT in {COMPLETED, PARTIAL}.
+ - **No Open Questions remain in the implementation report.**
  - TEST_CMD runnable from repo root.
+ - If DRAFT or open questions -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/test_input.md
@@ -385,16 +470,25 @@ test_report.md -> {{DOCS_ROOT}}/reports/test_<name>.md
    {{TEST_ROOT}} per the plan.
 4. Fill templates/output/test_report.md ->
    {{DOCS_ROOT}}/reports/test_<name>.md.
-5. On FAIL: list failing cases + snippets; loop back to sdlc-implement unless
+5. Fill the mandatory `## Open Questions` section (unresolved test gaps).
+   If none, write `- NONE`.
+6. Set VERTIFY: DRAFT. NEVER set STABLE here.
+7. On FAIL: list failing cases + snippets; loop back to sdlc-implement unless
    failures are pre-existing (then note and continue).
-6. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=test, STATUS=<DONE|SKIPPED + reason>.
+8. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=test,
+   STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE or SKIPPED (+ reason).
 
 ## Next Step
- - OPTIONAL: sdlc-review (or auto-approve with logged reason).
+ - OPTIONAL: sdlc-review — BUT ONLY AFTER:
+   a. Every Open Question in the test report resolved with the user.
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for the report.
+   c. sdlc-verify returns RESULT=PASS.
  - On FAIL -> back to sdlc-implement.
 
 ## Done when
  - Report exists with RESULT PASS/FAIL/SKIP; every FAIL has evidence + next.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation.
 EOF
 
 cat > $SKILL_DIR/sdlc-review/SKILL.md <<'EOF'
@@ -417,8 +511,11 @@ tokens: LINT_CMD, TEST_CMD, DOCS_ROOT
 Optional phase. Final quality gate before work counts as done.
 
 ## Pre-step verify
- - PLAN + IMPLEMENTATION exist. TEST_REPORT exists or SKIP reason recorded.
+ - **PLAN + IMPLEMENTATION are VERTIFY: STABLE** (user-confirmed via sdlc-verify).
+ - **TEST_REPORT is VERTIFY: STABLE** or SKIP reason recorded.
+ - **No Open Questions remain in plan, implementation, or test report.**
  - DIFF range resolvable (git).
+ - If any DRAFT or open question -> STOP. Run sdlc-verify, ask user.
 
 ## Input
 templates/input/review_input.md
@@ -431,16 +528,26 @@ review.md -> {{DOCS_ROOT}}/reports/review_<name>.md
 2. Checks: every acceptance criterion met? every plan step done or justified?
    tests pass (or skip justified)? {{LINT_CMD}} clean? no out-of-scope changes?
 3. Fill templates/output/review.md with findings tagged [BLOCKER] / [NIT].
-4. VERDICT=APPROVED only with zero blockers; CHANGES_REQUESTED lists a
+4. Fill the mandatory `## Open Questions` section (unresolved review concerns).
+   If none, write `- NONE`.
+5. Set VERTIFY: DRAFT. NEVER set STABLE here.
+6. VERDICT=APPROVED only with zero blockers; CHANGES_REQUESTED lists a
    concrete checklist that loops back to sdlc-implement.
-5. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=review, STATUS=DONE.
+7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=review,
+   STATUS=DONE_WITH_OPEN_QUESTIONS (if any) or DONE.
 
 ## Next Step
- - APPROVED -> phase complete; next work item starts at task/bug-implement.
+ - APPROVED -> phase complete — BUT ONLY AFTER:
+   a. Every Open Question in the review resolved with the user.
+   b. The user runs sdlc-verify and confirms DRAFT -> STABLE for the review.
+   c. sdlc-verify returns RESULT=PASS.
+   d. The next work item starts at task/bug-implement (which requires verify PASS).
  - CHANGES_REQUESTED -> back to sdlc-implement (GATE loop).
 
 ## Done when
  - Review report exists with explicit APPROVED or CHANGES_REQUESTED.
+ - All Open Questions answered by the user (recorded).
+ - sdlc-verify PASSED with recorded user confirmation.
 EOF
 
 cat > $SKILL_DIR/sdlc-status/SKILL.md <<'EOF'
@@ -462,7 +569,8 @@ tokens: DOCS_ROOT, PROJECT_ID
 ## Purpose
 Read-only. Answers "where are we?" by reading .harness/current.md plus the
 artifact dirs. Reports active phase, active task/bug, produced artifacts,
-blockers, and the next gate. Never edits source.
+blockers, open questions, and the next gate.
+**Never edits source. Never flips VERTIFY.**
 
 ## Pre-step verify
  - .harness/current.md exists and parses (FLOW/PHASE/STATUS/UPDATED_AT).
@@ -475,36 +583,41 @@ templates/input/status_input.md
 status_report.md -> {{DOCS_ROOT}}/reports/status_<name>.md
 
 ## Instructions
-1. Read .harness/current.md (phase, status, active item, notes).
+1. Read .harness/current.md (phase, status, active item, open questions, notes).
    If .harness/projects/{{PROJECT_ID}}/current.md exists, prefer it.
 2. Scan {{DOCS_ROOT}}: project.md, architecture.md, features/, tasks/, bugs/,
    plans/, reports/, .harness/.
 3. Read frontmatter per artifact: NAME, VERTIFY, STATUS/RESULT, dates.
-4. Build report:
+4. Scan every artifact for `## Open Questions` / `QUESTIONS_FOR_HUMAN` /
+   `Blockers` sections; list any unresolved items (not `- NONE`).
+5. Build report:
    - Current phase + STATUS.
    - Active item + artifact paths.
    - Artifact inventory with VERTIFY (DRAFT|STABLE).
+   - Open Questions list per artifact.
+   - Verify confirmations recorded.
    - Blockers (Notes + RESULT=BLOCKED / VERDICT=CHANGES_REQUESTED).
    - Next gate and what it requires.
-5. Fill templates/output/status_report.md ->
+6. Fill templates/output/status_report.md ->
    {{DOCS_ROOT}}/reports/status_<name>.md.
-6. Do NOT modify .harness/current.md.
+7. Do NOT modify .harness/current.md. Do NOT flip VERTIFY.
 
 ## Next Step
  - OPTIONAL: run any time, or when resuming a session.
  - If the next gate is customize-skills and any artifact is DRAFT ->
-   run sdlc-verify first.
+   run sdlc-verify first (user confirmation required).
+ - If any open questions exist -> resolve with user before next gate.
  - Otherwise proceed to the reported next gate.
 
 ## Done when
- - Report exists with phase, active item, inventory, next gate.
+ - Report exists with phase, active item, inventory, open questions, next gate.
  - No files other than the status report were modified.
 EOF
 
 cat > $SKILL_DIR/sdlc-verify/SKILL.md <<'EOF'
 ---
 name: sdlc-verify
-description: audit every wiki artifact for VERTIFY DRAFT and report what is not STABLE
+description: the ONLY skill allowed to flip DRAFT -> STABLE, with explicit user confirmation
 scope: common
 flow: harness-flow
 gate: GATE
@@ -518,10 +631,20 @@ tokens: DOCS_ROOT
 > COMMON base skill. Contains {{TOKENS}}. Run `sdlc-customize-skills` first.
 
 ## Purpose
-Documentation quality gate. Finds every artifact under {{DOCS_ROOT}} whose
-frontmatter still says VERTIFY: DRAFT, classifies who owns it, and fails while
-required artifacts remain DRAFT. arch-define flips project.md + features to
-STABLE; this skill makes that auditable before work starts.
+**The ONLY skill allowed to promote an artifact from DRAFT to STABLE.**
+Documentation quality gate. It:
+ 1. Finds every artifact under {{DOCS_ROOT}} and reads its VERTIFY state.
+ 2. Collects all Open Questions across artifacts.
+ 3. Presents findings to the user and asks for explicit confirmation:
+    - For every required artifact with VERTIFY: DRAFT -> ask "Confirm flip
+      DRAFT -> STABLE? [y/N]". Only `y` flips.
+    - For every open question -> ask the user to answer it.
+ 4. Records every user answer + timestamp in the verify report and in
+    {{DOCS_ROOT}}/.harness/current.md.
+ 5. Returns RESULT=PASS only when:
+    - Every required artifact is VERTIFY: STABLE (user-confirmed), AND
+    - No open questions remain anywhere.
+    Otherwise RESULT=FAIL.
 
 ## Pre-step verify
  - {{DOCS_ROOT}} exists and contains project.md + architecture.md.
@@ -537,26 +660,69 @@ verify_report.md -> {{DOCS_ROOT}}/reports/verify_<name>.md
 ## Instructions
 1. Walk {{DOCS_ROOT}} recursively (project.md, architecture.md, features/,
    tasks/, bugs/, plans/, reports/, .harness/project_profile.md).
-2. Per markdown file read frontmatter: path, NAME, VERTIFY, UPDATED_AT.
+2. Per markdown file read frontmatter: path, NAME, VERTIFY, UPDATED_AT,
+   and any `## Open Questions` / `QUESTIONS_FOR_HUMAN` / `Blockers` section.
 3. Classify DRAFT findings by owner phase:
    - project.md / features/* -> sdlc-arch-define
    - architecture.md / project_profile.md -> sdlc-arch-define
    - tasks/ bugs/ plans/ reports/ -> producing skill
-4. Required-to-be-STABLE set (default): project.md, architecture.md,
-   project_profile.md, all features/*. Any DRAFT in this set -> RESULT=FAIL.
-5. Fill templates/output/verify_report.md ->
-   {{DOCS_ROOT}}/reports/verify_<name>.md.
-6. Do NOT auto-flip VERTIFY; only report. Flips happen in owning skills.
-7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=verify, STATUS=<DONE|BLOCKED>.
+4. **Open Questions gate (user confirmation required):**
+   - For every open question (any section not equal to `- NONE`):
+     * Present it to the user.
+     * Ask the user for the answer.
+     * Record the answer + timestamp in
+       {{DOCS_ROOT}}/.harness/current.md "Open Questions" with status=resolved.
+     * If the user does not answer -> leave open, RESULT=FAIL.
+   - If any remain unresolved after the interview -> RESULT=FAIL, STOP.
+5. **DRAFT -> STABLE gate (user confirmation required per file):**
+   - For each file in the REQUIRED_STABLE set with VERTIFY: DRAFT:
+     * Present the file path + a short summary to the user.
+     * Ask exactly: "Confirm VERTIFY: DRAFT -> STABLE for <path>? [y/N]"
+     * On `y` (explicit): edit the file's frontmatter, replace `VERTIFY: DRAFT`
+       with `VERTIFY: STABLE`, and record:
+         `- <path> -> y @ <UTC timestamp>`
+       in {{DOCS_ROOT}}/.harness/current.md "Verify confirmations".
+     * On `N`, empty, or any other answer: leave as DRAFT and set RESULT=FAIL.
+   - NEVER flip without an explicit `y`.
+6. REQUIRED_STABLE default set:
+   - {{DOCS_ROOT}}/project.md
+   - {{DOCS_ROOT}}/architecture.md
+   - {{DOCS_ROOT}}/.harness/project_profile.md
+   - {{DOCS_ROOT}}/features/*.md
+   - {{DOCS_ROOT}}/.harness/skills/**/SKILL.md (rendered skills, once
+     customize-skills has run)
+   Any of these still DRAFT -> RESULT=FAIL.
+7. Optional artifacts (tasks/, bugs/, plans/, reports/) are reported but do
+   not fail the run unless FAIL_ON_DRAFT=YES in the input and they are in
+   the required list.
+8. Fill templates/output/verify_report.md ->
+   {{DOCS_ROOT}}/reports/verify_<name>.md. Include:
+   - Per-file VERTIFY state (before/after).
+   - Per-file user confirmation (y/N @ timestamp).
+   - Per-question user answer (or "unanswered").
+   - Final RESULT: PASS|FAIL.
+9. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=verify,
+   STATUS=DONE (RESULT=PASS) or BLOCKED (RESULT=FAIL).
+10. Do NOT auto-flip VERTIFY without explicit user confirmation.
+11. Do NOT modify any file other than the confirmed artifacts and the
+    verify report + current.md.
 
 ## Next Step
- - GATE: PASS -> proceed to sdlc-task-implement or sdlc-bug-implement.
- - FAIL -> return to the owning skill (usually sdlc-arch-define), then re-run
-   sdlc-customize-skills and this skill.
+ - GATE: RESULT=PASS -> proceed to sdlc-customize-skills (if not yet rendered)
+   then sdlc-task-implement or sdlc-bug-implement.
+ - RESULT=FAIL -> return to the owning skill (usually sdlc-arch-define),
+   resolve remaining items with the user, then re-run sdlc-customize-skills
+   and this skill.
+ - **No next phase may start until this skill returns PASS with all required
+   STABLE transitions user-confirmed and all open questions answered.**
 
 ## Done when
- - Report exists with RESULT PASS/FAIL and a per-artifact DRAFT list + owners.
- - No file other than the verify report was modified.
+ - Report exists with RESULT PASS/FAIL, per-artifact VERTIFY before/after,
+   per-file user confirmations, and per-question answers.
+ - Every required artifact is VERTIFY: STABLE with a recorded user `y`.
+ - No open questions remain anywhere in {{DOCS_ROOT}}.
+ - No file other than the confirmed artifacts, the verify report, and
+   current.md was modified.
 EOF
 
 cat > $SKILL_DIR/sdlc-synch-sdlc-skills/SKILL.md <<'EOF'
@@ -584,7 +750,7 @@ sdlc-customize-skills so project copies are re-rendered.
 ## Pre-step verify
  - git available; github.com reachable.
  - {{DOCS_ROOT}}/.harness/ writable.
- - project_profile.md exists (needed for the re-render step).
+ - project_profile.md exists and is VERTIFY: STABLE (needed for the re-render).
  - Working tree clean or changes stashed (avoid clobbering).
 
 ## Input
@@ -605,20 +771,22 @@ synch_report.md -> {{DOCS_ROOT}}/reports/synch_<name>.md
 3. For NEW/UPDATED copy SKILL.md + matching templates/input + templates/output
    into LOCAL_SKILLS_DIR / TEMPLATES_DIR. Never overwrite PROJECT_SKILLS_DIR.
 4. Record every action in the synch report (path, NEW|UPDATED|REMOVED, hash).
-5. If RERENDER_AFTER_SYNC=YES run sdlc-customize-skills.
-6. If VERIFY_AFTER_RENDER=YES run sdlc-verify.
-7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=synch-sdlc-skills, STATUS=DONE,
-   record the upstream commit SHA.
-8. Clean up $TMP.
+5. Set VERTIFY: DRAFT on any newly copied base skill. NEVER set STABLE.
+6. If RERENDER_AFTER_SYNC=YES run sdlc-customize-skills.
+7. If VERIFY_AFTER_RENDER=YES run sdlc-verify (user confirmation required).
+8. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=synch-sdlc-skills,
+   STATUS=DONE, record the upstream commit SHA.
+9. Clean up $TMP.
 
 ## Next Step
  - OPTIONAL: run on demand, or before starting a new task when the harness may
    have changed.
- - Always followed by sdlc-customize-skills (GATE) then sdlc-verify (GATE).
+ - Always followed by sdlc-customize-skills (GATE) then sdlc-verify (GATE,
+   user confirmation required).
 
 ## Done when
  - Synch report lists every NEW/UPDATED/REMOVED skill with the upstream SHA.
- - Project skills re-rendered; verify report passes.
+ - Project skills re-rendered; verify report PASSED with user confirmations.
 EOF
 
 cat > $SKILL_DIR/sdlc-ingest-harness-flow/SKILL.md <<'EOF'
@@ -675,7 +843,8 @@ ingest_harness_report.md -> {{DOCS_ROOT}}/reports/ingest_harness_<name>.md
       to the human, and wait. Do not write `.confirm` until answered.
    d. Run:
         scripts/ingest_harness_flow.sh --apply "$TARGET"
-4. NEVER overwrite: .harness/current.md, {{DOCS_ROOT}}/.harness/project_profile.md, wiki/**
+4. NEVER overwrite: .harness/current.md, {{DOCS_ROOT}}/.harness/project_profile.md,
+   wiki/**, and any artifact with VERTIFY: STABLE.
 5. MERGE items: list files needing manual merge; no auto 3-way merge.
 6. Fill templates/output/ingest_harness_report.md; write it under {{DOCS_ROOT}}/reports/.
 7. Update .harness/current.md (if present): PHASE=ingest-harness-flow,
@@ -683,7 +852,8 @@ ingest_harness_report.md -> {{DOCS_ROOT}}/reports/ingest_harness_<name>.md
 
 ## Next Step
  - GATE: STATE=new      -> sdlc-ingest-project
- - GATE: STATE=existing -> sdlc-customize-skills, then sdlc-verify
+ - GATE: STATE=existing -> sdlc-customize-skills, then sdlc-verify (user
+   confirmation required).
 
 ## Done when
  - Report exists with STATE, per-item classification, RESULT.
@@ -826,4 +996,3 @@ project:
   existing_docs: [...]
   assets: [...]
   conventions: { headings: ..., fences: ..., links: ... }
-EOF

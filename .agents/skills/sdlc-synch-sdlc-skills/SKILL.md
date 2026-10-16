@@ -22,7 +22,7 @@ sdlc-customize-skills so project copies are re-rendered.
 ## Pre-step verify
  - git available; github.com reachable.
  - {{DOCS_ROOT}}/.harness/ writable.
- - project_profile.md exists (needed for the re-render step).
+ - project_profile.md exists and is VERTIFY: STABLE (needed for the re-render).
  - Working tree clean or changes stashed (avoid clobbering).
 
 ## Input
@@ -43,17 +43,19 @@ synch_report.md -> {{DOCS_ROOT}}/reports/synch_<name>.md
 3. For NEW/UPDATED copy SKILL.md + matching templates/input + templates/output
    into LOCAL_SKILLS_DIR / TEMPLATES_DIR. Never overwrite PROJECT_SKILLS_DIR.
 4. Record every action in the synch report (path, NEW|UPDATED|REMOVED, hash).
-5. If RERENDER_AFTER_SYNC=YES run sdlc-customize-skills.
-6. If VERIFY_AFTER_RENDER=YES run sdlc-verify.
-7. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=synch-sdlc-skills, STATUS=DONE,
-   record the upstream commit SHA.
-8. Clean up $TMP.
+5. Set VERTIFY: DRAFT on any newly copied base skill. NEVER set STABLE.
+6. If RERENDER_AFTER_SYNC=YES run sdlc-customize-skills.
+7. If VERIFY_AFTER_RENDER=YES run sdlc-verify (user confirmation required).
+8. Update {{DOCS_ROOT}}/.harness/current.md: PHASE=synch-sdlc-skills,
+   STATUS=DONE, record the upstream commit SHA.
+9. Clean up $TMP.
 
 ## Next Step
  - OPTIONAL: run on demand, or before starting a new task when the harness may
    have changed.
- - Always followed by sdlc-customize-skills (GATE) then sdlc-verify (GATE).
+ - Always followed by sdlc-customize-skills (GATE) then sdlc-verify (GATE,
+   user confirmation required).
 
 ## Done when
  - Synch report lists every NEW/UPDATED/REMOVED skill with the upstream SHA.
- - Project skills re-rendered; verify report passes.
+ - Project skills re-rendered; verify report PASSED with user confirmations.

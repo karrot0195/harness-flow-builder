@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 TARGET: <path>
 STATE: <new|existing>
@@ -24,10 +24,15 @@ RESULT: <INSTALLED|RECONCILED|NOOP|BLOCKED>
  - .harness/current.md
  - {{DOCS_ROOT}}/.harness/project_profile.md
  - wiki/**
+ - All VERTIFY: STABLE artifacts
 
 ## Decisions
  - <item> - <overwrite|keep|merge> - <reason / who confirmed>
 
+## Open Questions
+ - NONE
+
 ## Next
  - new      -> sdlc-ingest-project
- - existing -> sdlc-customize-skills (GATE) then sdlc-verify
+ - existing -> sdlc-customize-skills (GATE) then sdlc-verify (GATE, user
+   confirmation required)

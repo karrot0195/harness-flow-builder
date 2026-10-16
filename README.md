@@ -4,6 +4,17 @@ A markdown-driven SDLC harness for AI agents (or humans) working on any
 software project. Every skill has a SKILL.md, an input template, and an
 output template.
 
+## Enforced rules
+
+1. **DRAFT -> STABLE only via sdlc-verify.** No skill may self-promote an
+   artifact to STABLE. sdlc-verify asks the user to confirm each flip (y/N)
+   and records the answer + timestamp.
+2. **Open Questions gate.** Any unresolved open questions in the current
+   phase must be resolved with the user before the next phase starts.
+3. **Phase-advance gate.** The next phase starts only when the previous
+   phase's required artifacts are all VERTIFY: STABLE (user-confirmed) and
+   no open questions remain.
+
 ## Layout (this repo = BUILDER)
 
     scripts/
@@ -42,7 +53,7 @@ synch-sdlc-skills: OPTIONAL (when the harness repo updates)
 | sdlc-ingest-project | path (brownfield) or description (new) | {{DOCS_ROOT}}/project.md + features/*.md |
 | sdlc-arch-define | project.md + features | {{DOCS_ROOT}}/architecture.md + .harness/project_profile.md |
 | sdlc-customize-skills | profile + base skills | {{DOCS_ROOT}}/.harness/skills/sdlc-*/SKILL.md |
-| sdlc-verify | wiki artifacts | {{DOCS_ROOT}}/reports/verify_*.md |
+| sdlc-verify | wiki artifacts | {{DOCS_ROOT}}/reports/verify_*.md (+ STABLE flips) |
 | sdlc-status | .harness/current.md + wiki | {{DOCS_ROOT}}/reports/status_*.md |
 | sdlc-synch-sdlc-skills | upstream harness repo | synced base skills + {{DOCS_ROOT}}/reports/synch_*.md |
 | sdlc-task-implement | feature request | {{DOCS_ROOT}}/tasks/task_*.md |
@@ -52,8 +63,9 @@ synch-sdlc-skills: OPTIONAL (when the harness repo updates)
 | sdlc-test | implementation report | {{DOCS_ROOT}}/reports/test_*.md |
 | sdlc-review | plan + impl + tests | {{DOCS_ROOT}}/reports/review_*.md |
 
-Rules: only sdlc-implement edits source. Every skill ends with a Pre-step
-verify and a Next Step (GATE or OPTIONAL).
+Rules: only sdlc-implement edits source. Only sdlc-verify flips DRAFT->STABLE
+(with user confirmation). Every skill ends with a Pre-step verify and a Next
+Step (GATE or OPTIONAL).
 
 ## Build the harness
 

@@ -11,3 +11,8 @@ ARCHITECTURE: {{DOCS_ROOT}}/architecture.md
 
 CONSTRAINTS:
  - <time/scope/tech constraints, or NONE>
+
+# Precondition (enforced)
+# - WORK_ITEM is VERTIFY: STABLE (user-confirmed via sdlc-verify).
+# - No Open Questions remain in WORK_ITEM.
+# - ARCHITECTURE + project_profile.md are STABLE.

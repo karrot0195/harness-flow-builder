@@ -11,7 +11,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 IMPLEMENTATION: {{DOCS_ROOT}}/reports/implementation_<NAME>.md
 RESULT: <PASS|FAIL|SKIP>
@@ -27,6 +27,9 @@ RESULT: <PASS|FAIL|SKIP>
 ## Coverage Gaps
  - <what was NOT tested and why>
 
+## Open Questions
+ - NONE
+
 ## Next
  - <fix failures | proceed to review>
 EOF
@@ -39,7 +42,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 STATUS: <OPEN|PLANNED|IN_PROGRESS|DONE|CANCELLED>
 PRIORITY: <LOW|MEDIUM|HIGH>
@@ -56,6 +59,9 @@ LINKED_FEATURE: <{{DOCS_ROOT}}/features/<FEATURE>.md or NONE>
 ## Out of Scope
  - <explicit non-goals>
 
+## Open Questions
+ - NONE
+
 ## Notes
  - <links, context>
 EOF
@@ -68,7 +74,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 PLAN: {{DOCS_ROOT}}/plans/plan_<NAME>.md
 VERDICT: <APPROVED|CHANGES_REQUESTED>
@@ -88,6 +94,9 @@ VERDICT: <APPROVED|CHANGES_REQUESTED>
 ## Required Changes
  - <must fix before APPROVED, or NONE>
 
+## Open Questions
+ - NONE
+
 ## Approval
  - status: <APPROVED|CHANGES_REQUESTED>
  - reviewer: <agent|human>
@@ -101,7 +110,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 ---
 
@@ -109,6 +118,9 @@ Features:
  - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
  - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
  - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
+
+## Open Questions
+ - NONE
 EOF
 
 cat > templates/output/project_profile.md <<'EOF'
@@ -119,7 +131,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 ---
 
@@ -163,6 +175,9 @@ VERTIFY: <DRAFT|STABLE>
  - commit style: <...>
  - test style: <...>
  - other: <...>
+
+## Open Questions
+ - NONE
 EOF
 
 cat > templates/output/plan.md <<'EOF'
@@ -173,7 +188,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 WORK_ITEM: <{{DOCS_ROOT}}/tasks/task_X.md | {{DOCS_ROOT}}/bugs/bug_X.md>
 ESTIMATED_STEPS: <N>
@@ -192,6 +207,9 @@ ESTIMATED_STEPS: <N>
 
 ## Risks
  - <risk> -> mitigation: <...>
+
+## Open Questions
+ - NONE
 EOF
 
 cat > templates/output/implementation.md <<'EOF'
@@ -202,7 +220,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 PLAN: {{DOCS_ROOT}}/plans/plan_<NAME>.md
 RESULT: <COMPLETED|PARTIAL|BLOCKED>
@@ -224,6 +242,9 @@ RESULT: <COMPLETED|PARTIAL|BLOCKED>
 ## Known Issues / Leftovers
  - <or NONE>
 
+## Open Questions
+ - NONE
+
 ## How to Verify
  <exact commands/steps for the next phase>
 EOF
@@ -236,13 +257,16 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 ---
 
 <DESCRIPTION>
 
 <REFERENCE PATH>
+
+## Open Questions
+ - NONE
 EOF
 
 cat > templates/output/bug.md <<'EOF'
@@ -253,7 +277,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 STATUS: <OPEN|CONFIRMED|FIXED|WONT_FIX>
 SEVERITY: <LOW|MEDIUM|HIGH|CRITICAL>
@@ -272,6 +296,9 @@ SEVERITY: <LOW|MEDIUM|HIGH|CRITICAL>
 
 ## Environment
  <os/runtime/versions>
+
+## Open Questions
+ - NONE
 EOF
 
 cat > templates/output/architecture.md <<'EOF'
@@ -282,7 +309,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 ---
 
@@ -302,7 +329,7 @@ VERTIFY: <DRAFT|STABLE>
  - ADR-1: <decision> because <reason>
 
 ## Open Questions
- - <question> -> owner: <who>
+ - NONE
 EOF
 
 cat > templates/output/status_report.md <<'EOF'
@@ -313,10 +340,10 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 PHASE: <phase>
-STATUS: <PENDING|IN_PROGRESS|DONE|BLOCKED|SKIPPED>
+STATUS: <PENDING|IN_PROGRESS|DONE|DONE_WITH_OPEN_QUESTIONS|BLOCKED|SKIPPED>
 PROJECT_ID: {{PROJECT_ID}}
 NEXT_GATE: <skill name>
 
@@ -328,39 +355,51 @@ NEXT_GATE: <skill name>
 ## Artifact Inventory
  - <path> - VERTIFY: <DRAFT|STABLE> - <STATUS/RESULT>
 
+## Open Questions (all artifacts)
+ - <file> - <question> - owner: <skill> - status: <open|resolved @ timestamp>
+
+## Verify Confirmations
+ - <file> -> <y|N> @ <timestamp>
+
 ## Blockers
  - <or NONE>
 
 ## Next Gate Requirements
- - <what must be true to pass the next gate>
+ - Previous phase artifacts all VERTIFY: STABLE (user-confirmed via sdlc-verify)
+ - No open questions remain
+ - sdlc-verify returned RESULT=PASS
 EOF
 
 cat > templates/output/verify_report.md <<'EOF'
 ---
 NAME: <VERIFY NAME>
-DESCRIPTION: DRAFT/STABLE audit of wiki artifacts
+DESCRIPTION: DRAFT/STABLE audit + user confirmation of transitions
 CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 RESULT: <PASS|FAIL>
 
 ---
 
 ## Required-to-be-STABLE
- - <path> - <STABLE|DRAFT> - owner: <skill>
+ - <path> - before: <DRAFT|STABLE> - after: <DRAFT|STABLE> - confirmed_by: <user|NONE> - confirmed_at: <DATE|NONE>
 
 ## Optional Artifacts
  - <path> - <STABLE|DRAFT>
 
+## Open Questions Interview
+ - <file> - <question> - user_answer: <answer|UNANSWERED> - resolved_at: <DATE|NONE>
+
 ## Findings
- - [BLOCKER] <artifact still DRAFT> -> owner: <skill>
+ - [BLOCKER] <artifact still DRAFT / question unanswered> -> owner: <skill>
  - [NIT] <...>
 
 ## Next
- - <proceed | return to sdlc-arch-define and re-run customize-skills>
+ - PASS -> proceed to sdlc-customize-skills, then task/bug-implement
+ - FAIL -> return to owning skill, resolve, re-run customize-skills + verify
 EOF
 
 cat > templates/output/synch_report.md <<'EOF'
@@ -371,7 +410,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 HARNESS_REPO: https://github.com/karrot0195/harness-flow-builder.git
 UPSTREAM_SHA: <sha>
@@ -387,8 +426,11 @@ UPSTREAM_SHA: <sha>
 ## Actions Taken
  - <copy/render/verify steps>
 
+## Open Questions
+ - NONE
+
 ## Next
- - <run customize-skills | done>
+ - <run customize-skills | run sdlc-verify (user confirmation required) | done>
 EOF
 
 cat > templates/output/workspace.md <<'EOF'
@@ -399,7 +441,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 PROJECTS_ROOT: {{PROJECTS_ROOT}}
 DOCS_ROOT: {{DOCS_ROOT}}
@@ -411,6 +453,9 @@ DOCS_ROOT: {{DOCS_ROOT}}
 | ID | Path | Type | Enabled | Wiki |
 |---|---|---|---|---|
 | <id> | {{PROJECTS_ROOT}}/<dir> | <brownfields|new> | <yes|no> | {{DOCS_ROOT}}/projects/<id> |
+
+## Open Questions
+ - NONE
 
 ## Notes
  - <any global constraints or ordering>
@@ -424,7 +469,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 TARGET: <path>
 STATE: <new|existing>
@@ -443,13 +488,18 @@ RESULT: <INSTALLED|RECONCILED|NOOP|BLOCKED>
  - .harness/current.md
  - {{DOCS_ROOT}}/.harness/project_profile.md
  - wiki/**
+ - All VERTIFY: STABLE artifacts
 
 ## Decisions
  - <item> - <overwrite|keep|merge> - <reason / who confirmed>
 
+## Open Questions
+ - NONE
+
 ## Next
  - new      -> sdlc-ingest-project
- - existing -> sdlc-customize-skills (GATE) then sdlc-verify
+ - existing -> sdlc-customize-skills (GATE) then sdlc-verify (GATE, user
+   confirmation required)
 EOF
 
 # ---------- INPUT templates ----------
@@ -467,6 +517,10 @@ AFFECTED_PATHS:
  - <file/dir touched by the implementation>
 
 TEST_COMMAND: <command to run, defaults to TEST_CMD from project_profile.md>
+
+# Precondition (enforced)
+# - IMPLEMENTATION report is VERTIFY: STABLE (user-confirmed via sdlc-verify).
+# - No Open Questions remain in the implementation report.
 EOF
 
 cat > templates/input/task_implement_input.md <<'EOF'
@@ -485,6 +539,10 @@ ACCEPTANCE_CRITERIA:
  - <criterion 2>
 
 PRIORITY: <LOW|MEDIUM|HIGH>
+
+# Precondition (enforced)
+# - sdlc-verify PASSED for ingest/arch/customize chain.
+# - No Open Questions anywhere in {{DOCS_ROOT}}.
 EOF
 
 cat > templates/input/review_input.md <<'EOF'
@@ -500,6 +558,11 @@ IMPLEMENTATION: {{DOCS_ROOT}}/reports/implementation_<NAME>.md
 TEST_REPORT:    {{DOCS_ROOT}}/reports/test_<NAME>.md   (or NONE if skipped)
 
 DIFF: <git diff range, e.g. main..HEAD, or patch file path>
+
+# Precondition (enforced)
+# - PLAN + IMPLEMENTATION are VERTIFY: STABLE (user-confirmed).
+# - TEST_REPORT is VERTIFY: STABLE or SKIP reason recorded.
+# - No Open Questions remain.
 EOF
 
 cat > templates/input/plan_task_input.md <<'EOF'
@@ -516,6 +579,11 @@ ARCHITECTURE: {{DOCS_ROOT}}/architecture.md
 
 CONSTRAINTS:
  - <time/scope/tech constraints, or NONE>
+
+# Precondition (enforced)
+# - WORK_ITEM is VERTIFY: STABLE (user-confirmed via sdlc-verify).
+# - No Open Questions remain in WORK_ITEM.
+# - ARCHITECTURE + project_profile.md are STABLE.
 EOF
 
 cat > templates/input/ingest_project_input.md <<'EOF'
@@ -543,6 +611,10 @@ PROJECT_DESCRIPTION: |
 
 ## Constraints (optional)
  - <tech preferences, must-haves, out-of-scope>
+
+# Note: the output project.md + feature docs will be VERTIFY: DRAFT.
+# Before arch-define starts, the user must run sdlc-verify and confirm
+# DRAFT -> STABLE for each required file, and answer any Open Questions.
 EOF
 
 cat > templates/input/implement_input.md <<'EOF'
@@ -560,6 +632,10 @@ SCOPE_SUBSET:
  - <step id to implement, if partial>
 
 BRANCH: <git branch or WORKING_DIR>
+
+# Precondition (enforced)
+# - PLAN is VERTIFY: STABLE (user-confirmed via sdlc-verify).
+# - No Open Questions remain in the plan.
 EOF
 
 cat > templates/input/customize_skills_input.md <<'EOF'
@@ -583,6 +659,11 @@ TARGET_SKILLS_DIR: {{DOCS_ROOT}}/.harness/skills
 ## Optional overrides (leave blank to use profile values)
 OVERRIDES:
  - TOKEN: <value>
+
+# Precondition (enforced)
+# - architecture.md is VERTIFY: STABLE (user-confirmed).
+# - project_profile.md is VERTIFY: STABLE (user-confirmed).
+# - No Open Questions remain in either file.
 EOF
 
 cat > templates/input/bug_implement_input.md <<'EOF'
@@ -604,6 +685,10 @@ ACTUAL:   <what happens instead>
 
 ENVIRONMENT: <os/runtime/versions, or UNKNOWN>
 SEVERITY: <LOW|MEDIUM|HIGH|CRITICAL>
+
+# Precondition (enforced)
+# - sdlc-verify PASSED for ingest/arch/customize chain.
+# - No Open Questions anywhere in {{DOCS_ROOT}}.
 EOF
 
 cat > templates/input/arch_define_input.md <<'EOF'
@@ -621,6 +706,11 @@ FEATURE_DOCS:
  - {{DOCS_ROOT}}/features/<FEATURE_2>.md
 
 QUESTIONS_FOR_HUMAN: <list anything blocking a decision, or NONE>
+
+# Precondition (enforced)
+# - project.md + all feature docs are VERTIFY: STABLE (user-confirmed via
+#   sdlc-verify).
+# - No Open Questions remain in project.md or any feature doc.
 EOF
 
 cat > templates/input/status_input.md <<'EOF'
@@ -664,6 +754,15 @@ OPTIONAL:
  - {{DOCS_ROOT}}/reports/*.md
 
 FAIL_ON_DRAFT: YES
+
+# Behavior (enforced)
+# 1. Walk DOCS_ROOT; read VERTIFY per file.
+# 2. Collect all Open Questions (sections not equal to "- NONE").
+# 3. For each open question: ask the user; record answer + timestamp.
+# 4. For each required DRAFT file: ask the user "Confirm DRAFT -> STABLE? [y/N]".
+#    Flip only on explicit "y"; record answer + timestamp.
+# 5. RESULT=PASS only if all required files are STABLE (user-confirmed) and
+#    no open questions remain.
 EOF
 
 cat > templates/input/synch_sdlc_skills_input.md <<'EOF'
@@ -721,6 +820,7 @@ PROTECTED:
  - .harness/current.md
  - {{DOCS_ROOT}}/.harness/project_profile.md
  - wiki/**
+ - All VERTIFY: STABLE artifacts
 EOF
 
 cat > templates/input/workspace_ingest_input.md <<'EOF'

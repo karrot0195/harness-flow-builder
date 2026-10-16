@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 IMPLEMENTATION: {{DOCS_ROOT}}/reports/implementation_<NAME>.md
 RESULT: <PASS|FAIL|SKIP>
@@ -20,6 +20,9 @@ RESULT: <PASS|FAIL|SKIP>
 
 ## Coverage Gaps
  - <what was NOT tested and why>
+
+## Open Questions
+ - NONE
 
 ## Next
  - <fix failures | proceed to review>

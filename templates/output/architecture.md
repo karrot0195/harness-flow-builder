@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 ---
 
@@ -25,4 +25,4 @@ VERTIFY: <DRAFT|STABLE>
  - ADR-1: <decision> because <reason>
 
 ## Open Questions
- - <question> -> owner: <who>
+ - NONE

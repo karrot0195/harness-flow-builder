@@ -12,3 +12,7 @@ SCOPE_SUBSET:
  - <step id to implement, if partial>
 
 BRANCH: <git branch or WORKING_DIR>
+
+# Precondition (enforced)
+# - PLAN is VERTIFY: STABLE (user-confirmed via sdlc-verify).
+# - No Open Questions remain in the plan.

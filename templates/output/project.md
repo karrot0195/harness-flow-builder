@@ -5,7 +5,7 @@ CREATED_AT: <DATE>
 UPDATED_AT: <DATE>
 
 ---
-VERTIFY: <DRAFT|STABLE>
+VERTIFY: DRAFT
 
 ---
 
@@ -13,3 +13,6 @@ Features:
  - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
  - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
  - <FEATURE> {{DOCS_ROOT}}/features/<FEATURE>.md
+
+## Open Questions
+ - NONE
