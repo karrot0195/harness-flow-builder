@@ -38,9 +38,9 @@ export PROJECT_ID PROJECT_PATH DOCS_ROOT WORKSPACE_GATE PROJECTS_ROOT
 mkdir -p "$TARGET/$DOCS_ROOT"
 
 # Copy the portable tree. Never clobber existing consumer content.
-if [ -d "$SRC/skills" ]; then
+if [ -d "$SRC/.agents/skills" ]; then
   mkdir -p "$TARGET/.agents/skills"
-  cp -R "$SRC/skills/." "$TARGET/.agents/skills/"
+  cp -R "$SRC//.agents/skills/." "$TARGET/.agents/skills/"
 fi
 
 if [ -d "$SRC/templates" ]; then
